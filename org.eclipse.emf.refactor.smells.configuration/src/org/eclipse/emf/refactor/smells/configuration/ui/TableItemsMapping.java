@@ -1,4 +1,4 @@
-package org.eclipse.emf.refactor.smells.configuration.core;
+package org.eclipse.emf.refactor.smells.configuration.ui;
 
 import java.util.LinkedList;
 
