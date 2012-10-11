@@ -5,7 +5,7 @@
          point="org.eclipse.ui.propertyPages">
       <page
             category="org.eclipse.emf.refactor.propertypage"
-            class="org.eclipse.emf.refactor.smells.configuration.ui.ModelSmellsConfigurationPage"
+            class="org.eclipse.emf.refactor.smells.configuration.ui.ModelSmellPropertyPage"
             id="org.eclipse.emf.refactor.smells.configuration"
             name="Model Smells configuration">
       </page>
@@ -14,7 +14,7 @@
          point="org.eclipse.ui.propertyPages">
       <page
             category="org.eclipse.emf.refactor.propertypage"
-            class="org.eclipse.emf.refactor.smells.configuration.ui.ModelSmellsConfigurationPage"
+            class="org.eclipse.emf.refactor.smells.configuration.ui.ModelSmellPropertyPage"
             id="org.eclipse.emf.refactor.smells.configuration"
             name="Model Smells configuration">
       </page>
