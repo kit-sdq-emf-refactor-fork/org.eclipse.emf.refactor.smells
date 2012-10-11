@@ -15,22 +15,22 @@ import org.eclipse.emf.refactor.smells.core.ModelSmell;
 public class SortedModelSmellList {
 	private LinkedList<LinkedList<ModelSmell>> smellList;
 
-	protected SortedModelSmellList(LinkedList<ModelSmell> rawSmellList) {
+	public SortedModelSmellList(LinkedList<ModelSmell> rawSmellList) {
 		smellList = new LinkedList<LinkedList<ModelSmell>>();
 		for (int position = 0; position < rawSmellList.size(); position++) {
 			addSmellToList(rawSmellList.get(position));
 		}
 	}
 
-	protected int getSize(){
+	public int getSize(){
 		return smellList.size();
 	}
 	
-	protected LinkedList<ModelSmell> get(int index){
+	public LinkedList<ModelSmell> get(int index){
 		return smellList.get(index);
 	}
 	
-	protected LinkedList<LinkedList<ModelSmell>> getModelSmellList() {
+	public LinkedList<LinkedList<ModelSmell>> getModelSmellList() {
 		return smellList;
 	}
 
