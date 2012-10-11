@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            category="org.eclipse.emf.refactor.propertypage"
+            class="org.eclipse.emf.refactor.smells.configuration.ui.ModelSmellsConfigurationPage"
+            id="org.eclipse.emf.refactor.smells.configuration"
+            name="Model Smells configuration">
+      </page>
+   </extension>
+      <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            category="org.eclipse.emf.refactor.propertypage"
+            class="org.eclipse.emf.refactor.smells.configuration.ui.ModelSmellsConfigurationPage"
+            id="org.eclipse.emf.refactor.smells.configuration"
+            name="Model Smells configuration">
+      </page>
+   </extension>
+
+</plugin>
