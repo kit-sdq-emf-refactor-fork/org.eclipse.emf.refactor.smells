@@ -1,5 +1,6 @@
 package org.eclipse.emf.refactor.smells.runtime;
 
+import org.eclipse.emf.refactor.smells.runtime.managers.RuntimeManager;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -27,6 +28,7 @@ public class Activator extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+		RuntimeManager.getInstance();
 	}
 
 	/*
