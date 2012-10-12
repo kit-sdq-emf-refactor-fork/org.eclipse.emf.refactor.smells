@@ -7,6 +7,7 @@ Bundle-Activator: org.eclipse.emf.refactor.smells.generator.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.resources;bundle-version="3.8.0",
+ org.eclipse.emf.ecore;bundle-version="2.8.1",
  org.eclipse.emf.refactor.smells;bundle-version="0.7.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
