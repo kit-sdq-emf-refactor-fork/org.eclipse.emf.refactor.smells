@@ -6,10 +6,12 @@ import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.refactor.smells.runtime.managers.ModelManager;
+import org.eclipse.emf.refactor.smells.managers.SelectionManager;
 import org.eclipse.emf.refactor.smells.runtime.managers.RuntimeManager;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.widgets.Shell;
@@ -34,41 +36,38 @@ public class FindModelSmellHandler implements IHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		Cursor oldCursor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell().getCursor();
 		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell().setCursor(new Cursor(null,SWT.CURSOR_WAIT));
-		
-		if (selectedEObject == null && selectedFile == null) {
+		ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
+		selectedEObject = SelectionManager.getEObject(selection);
+		if (selectedEObject == null) {	
 			MessageDialog.openError(
 					shell,
-					"EMF Smell: Error when trying to execute smell search",
-					"No selected model element or file!");
+					"EMF Quality Assurance: Error when trying to execute smell search",
+					"No selected EMF model element!");
+			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell().setCursor(oldCursor);
 			return null;
 		}
-		try{
-			EObject root;
-			if(selectedEObject != null){
-				root = selectedEObject;
-				String path = root.eResource().getURI().toPlatformString(true);
-				selectedFile = (IFile)org.eclipse.core.resources.ResourcesPlugin.getWorkspace().getRoot().findMember(path);
-			}else{
-				root = ModelManager.loadFile(selectedFile.getFullPath().toString());
-			}
+		try {
+			if (selectedEObject != null) {
+				String path = selectedEObject.eResource().getURI().toPlatformString(true);
+				selectedFile = (IFile) ResourcesPlugin.getWorkspace().getRoot().findMember(path);
+			} 
 			selectedProject = selectedFile.getProject();
 			RuntimeManager.getInstance();
-			RuntimeManager.findConfiguredModelSmells(selectedProject, root, selectedFile);
-//			IWorkbenchWindow workbenchWindow= PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-//			IWorkbenchPage page = workbenchWindow.getActivePage();
-//			IDE.openEditor(page, selectedFile);
-		}catch(Exception ex){
-			ex.printStackTrace();
+			System.out.println("Root: " + selectedEObject);
+			System.out.println("Project: " + selectedProject);
+			RuntimeManager.findConfiguredModelSmells(selectedProject, selectedEObject, selectedFile);
+		} catch (Exception ex) {
+//			ex.printStackTrace();
 			Throwable cause = ex.getCause();
 			if(!(cause == null) && cause.getClass().getName().equals("org.eclipse.emf.ecore.xmi.PackageNotFoundException")){
 				MessageDialog.openError(
 						shell,
-						"Error when trying to open File",
+						"EMF Quality Assurance: Error when trying to open File",
 						"The file you selected is not a (valid) EMF model.");
-			}else{
+			} else {
 			MessageDialog.openError(
 					shell,
-					"Error when trying to execute EMF Smell search",
+					"EMF Quality Assurance: Error when trying to execute smell search",
 					ex.toString());
 			}
 		} finally {
