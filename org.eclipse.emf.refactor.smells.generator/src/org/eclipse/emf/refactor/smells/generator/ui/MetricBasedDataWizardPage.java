@@ -99,8 +99,7 @@ public class MetricBasedDataWizardPage extends WizardPage implements Listener {
 		label.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
 		label = new Label(group, SWT.NONE);
 		label.setText("Semantic: The comparator determines how the local value is \ncompared to the limit set in the configuration (larger, smaller, equal, ...). \nFor example if you select \">\" the local value of the metric has to be \nlarger than the limit to indicate a smell.");
-		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
+		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));		
 	}
 
 	public void initContents() {

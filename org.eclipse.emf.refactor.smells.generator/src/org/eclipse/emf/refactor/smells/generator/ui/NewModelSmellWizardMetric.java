@@ -133,7 +133,9 @@ public class NewModelSmellWizardMetric extends Wizard implements INewWizard, INe
 	}
 
 	@Override
-	public void updateSecondPage() { }
+	public void updateSecondPage() {
+		metricPage.initContents();
+	}
 
 	@Override
 	public void setNewSmellId(String id) {

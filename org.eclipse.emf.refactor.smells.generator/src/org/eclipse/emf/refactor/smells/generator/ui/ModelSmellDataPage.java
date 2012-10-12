@@ -183,15 +183,14 @@ public class ModelSmellDataPage extends WizardPage implements Listener {
 		if(!initialization ){
 			updatePageComplete();
 			getWizard().getContainer().updateButtons();		
-		}
-		
+		}		
 	}
 	
 	@Override
 	public boolean canFlipToNextPage() {
 		if (((INewModelSmellWizard) getWizard()).getPageNumbers() > 1) {
 			if (this.isPageComplete()) {
-				((INewModelSmellWizard) getWizard()).updateSecondPage();
+//				((INewModelSmellWizard) getWizard()).updateSecondPage();
 				return true;
 			}
 		} 
@@ -201,6 +200,7 @@ public class ModelSmellDataPage extends WizardPage implements Listener {
 	@Override
 	public WizardPage getNextPage() {
 		if (((INewModelSmellWizard) getWizard()).getPageNumbers() > 1) {
+			((INewModelSmellWizard) getWizard()).updateSecondPage();
 			return ((INewModelSmellWizard) getWizard()).getSecondPage();
 		} else {
 			return null;
@@ -208,18 +208,18 @@ public class ModelSmellDataPage extends WizardPage implements Listener {
 	}
 
 	/**
-	 * Wird jedes mal ausgeführ wenn sich der Inhalt eines Textfeldes im Wizard
+	 * Wird jedes mal ausgeführt wenn sich der Inhalt eines Textfeldes im Wizard
 	 * verändert. Überprüft die inhalte der Textfelder und erzeugt
 	 * entschprechende Meldungen im Wizardfenster.
 	 */
 	private void updatePageComplete() {
 
 		if(nameTextField.getText().isEmpty()){
-			this.setMessage("Modelsmell name is not specified.", ERROR);
+			this.setMessage("Model smell name is not specified.", ERROR);
 			this.setPageComplete(false);
 		} else
 		if(idTextField.getText().isEmpty()){
-			this.setMessage("Modelsmell ID is not specified.", ERROR);
+			this.setMessage("Model smell ID is not specified.", ERROR);
 			this.setPageComplete(false);
 		} else
 		if(!checkNewID()){
@@ -227,11 +227,11 @@ public class ModelSmellDataPage extends WizardPage implements Listener {
 			this.setPageComplete(false);
 		} else
 		if(metamodelCombo.getText().isEmpty()){
-			this.setMessage("Modelsmell metamodel is not specified.", ERROR);
+			this.setMessage("Meta model is not specified.", ERROR);
 			this.setPageComplete(false);
 		} else
 		if(!checkProject()){
-			this.setMessage("Target project for the Modelsmell is not specified.", ERROR);
+			this.setMessage("Target project is not specified.", ERROR);
 			this.setPageComplete(false);
 		} else {
 			this.setMessage("");
