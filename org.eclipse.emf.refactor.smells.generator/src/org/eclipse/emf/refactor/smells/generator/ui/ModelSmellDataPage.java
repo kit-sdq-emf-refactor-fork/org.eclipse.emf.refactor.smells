@@ -95,7 +95,7 @@ public class ModelSmellDataPage extends WizardPage implements Listener {
 		// col:1
 		label = new Label(group, SWT.NONE);
 		label.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
-		label.setText("Target project *:");
+		label.setText("Target project (*):");
 		// col:2
 		projectCombo = new Combo(group, SWT.READ_ONLY);
 		final GridData projectComboData = new GridData(GridData.FILL_HORIZONTAL);
@@ -113,7 +113,7 @@ public class ModelSmellDataPage extends WizardPage implements Listener {
 		// - Name -
 		// col:1
 		label = new Label(group, SWT.NONE);
-		label.setText("Name *:");
+		label.setText("Name (*):");
 		label.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
 		// col:2
 		nameTextField = new Text(group, SWT.BORDER);
@@ -122,7 +122,7 @@ public class ModelSmellDataPage extends WizardPage implements Listener {
 		// - Id -
 		// col:1
 		label = new Label(group, SWT.NONE);
-		label.setText("Id *:");
+		label.setText("Id (*):");
 		label.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
 		// col:2
 		idTextField = new Text(group, SWT.BORDER);
@@ -141,7 +141,7 @@ public class ModelSmellDataPage extends WizardPage implements Listener {
 		// - Metamodel -
 		// col:1
 		label = new Label(group, SWT.NONE);
-		label.setText("Metamodel *:");
+		label.setText("Meta model (*):");
 		label.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
 		// col:2
 		
@@ -151,13 +151,13 @@ public class ModelSmellDataPage extends WizardPage implements Listener {
 		//projectCombo.setText("Select Project");
 		metamodelCombo.addListener(SWT.Selection, (org.eclipse.swt.widgets.Listener)this);
 		// - Source -
-		group = new Group(container, SWT.NONE);
-		group.setText("Generation Options");
-	    layout = new GridLayout();
-	    layout.numColumns = 2;
-	    group.setLayout(layout);
-	    gridData = new GridData(GridData.FILL_HORIZONTAL);
-	    group.setLayoutData(gridData);
+//		group = new Group(container, SWT.NONE);
+//		group.setText("Generation Options");
+//	    layout = new GridLayout();
+//	    layout.numColumns = 2;
+//	    group.setLayout(layout);
+//	    gridData = new GridData(GridData.FILL_HORIZONTAL);
+//	    group.setLayoutData(gridData);
 //		// col:1
 //		label = new Label(group, SWT.NONE);
 //		label.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));

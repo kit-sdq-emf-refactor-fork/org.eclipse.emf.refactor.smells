@@ -24,4 +24,6 @@ public interface INewModelSmellWizard {
 	public void setNewSmellDescription(String text);
 
 	public void setNewSmellMetamodel(String text);
+
+	public String getNewSmellMetamodel();
 }
