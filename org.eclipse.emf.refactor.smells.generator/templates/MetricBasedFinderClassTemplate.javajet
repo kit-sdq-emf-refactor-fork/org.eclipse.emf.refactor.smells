@@ -1,4 +1,4 @@
-<%@ package="org.eclipse.emf.refactor.smells" class="ModelSmellFinderClass"
+<%@ jet package="org.eclipse.emf.refactor.smells" class="ModelSmellFinderClass"
 imports="org.eclipse.emf.refactor.smells.generator.core.MetricBasedModelSmellInfo"%>
 <%MetricBasedModelSmellInfo info = (MetricBasedModelSmellInfo)argument; %>
 package <%=info.getPackage()%>;
@@ -20,13 +20,13 @@ public final class <%=info.getClassName()%> extends MetricBasedModelSmellFinderC
 	public LinkedList<LinkedList<EObject>> findSmell(EObject root) {
 		LinkedList<EObject> rootList = new LinkedList<EObject>();
 		rootList.add(root);
-		ICalculateClass localCalculateClass = localMetric.getCalculateClass();
+		IMetricCalculator localCalculateClass = localMetric.getCalculateClass();
 		double globalLimit = this.getLimit();
 		return findSmellyObjectGroups(root, globalLimit, localCalculateClass);
 	}
 	
 	private LinkedList<LinkedList<EObject>> findSmellyObjectGroups(EObject root, double globalLimit, 
-				ICalculateClass localCalculateClass){
+				IMetricCalculator localCalculateClass){
 		String context = localMetric.getContext();
 		LinkedList<LinkedList<EObject>> smellyEObjects = new LinkedList<LinkedList<EObject>>();
 		List<EObject> containedEObjects = root.eContents();

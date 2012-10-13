@@ -37,6 +37,6 @@ public class MetricBasedModelSmellInfo extends ModelSmellInfo {
 	@Override
 	public String getDescription() {
 		String descriptionText = super.getDescription();
-		return descriptionText + "(calculated value " + comparator + " limit indicates smell)";
+		return descriptionText + " ('value " + comparator + " limit' indicates this smell)";
 	}
 }

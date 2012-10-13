@@ -13,7 +13,7 @@ import org.eclipse.core.runtime.Platform;
  */
 
 public class MetricStubLoader {
-	private static final String EMF_METRICS_EXTENSION_POINT_NAME = "de.unimarburg.swt.emf.metric";
+	private static final String EMF_METRICS_EXTENSION_POINT_NAME = "org.eclipse.emf.refactor.metrics";
 	private static final String METRIC_TAG = "metric";
 	private static final String METRIC_NAME_TAG = "metric_name";
 	private static final String METRIC_ID_TAG = "id";

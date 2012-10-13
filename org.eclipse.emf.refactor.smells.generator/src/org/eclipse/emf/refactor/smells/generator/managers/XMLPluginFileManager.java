@@ -65,7 +65,7 @@ public class XMLPluginFileManager extends XMLManager {
 			if (doc != null) {
 				root = doc.getDocumentElement();
 				Node extensionPoint = root.getElementsByTagName(EXTENSION_TAG).item(0); 
-				Node newEntry = createModelSmellElement(doc, name, description,	metamodel, id, finderClass);
+				Node newEntry = createModelSmellElement(doc, name, id, description,	metamodel, finderClass);
 				extensionPoint.appendChild(newEntry);
 			}
 		}

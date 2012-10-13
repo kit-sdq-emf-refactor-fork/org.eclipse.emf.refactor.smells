@@ -4,8 +4,8 @@ package org.eclipse.emf.refactor.smells.generator.ui;
 import java.util.LinkedList;
 
 import org.eclipse.emf.refactor.smells.generator.core.MetricData;
+import org.eclipse.emf.refactor.smells.generator.core.MetricStubLoader;
 import org.eclipse.emf.refactor.smells.generator.interfaces.INewModelSmellWizard;
-import org.eclipse.emf.refactor.smells.generator.managers.GenerationManager;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -103,7 +103,7 @@ public class MetricBasedDataWizardPage extends WizardPage implements Listener {
 	}
 
 	public void initContents() {
-		setCombos(GenerationManager.loadAllMetricData());
+		setCombos(MetricStubLoader.loadModelMetricData());
 	}
 
 	private void setCombos(LinkedList<MetricData> metricDatas) {
@@ -113,7 +113,7 @@ public class MetricBasedDataWizardPage extends WizardPage implements Listener {
 		String metamodel = ((INewModelSmellWizard) this.getWizard()).getNewSmellMetamodel();
 		for (MetricData metricData : metricDatas) {
 			if(metamodel.equals(metricData.getMetamodel())){
-				String key = metricData.getMetricName() + "(ID: " + metricData.getMetricID() + ")(" + metricData.getMetricDescription() +")";
+				String key = metricData.getMetricName() + " (" + metricData.getMetricDescription() +")";
 				metricDataCombo.setData(key, metricData);
 				metricDataCombo.add(key);
 			}

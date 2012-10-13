@@ -33,11 +33,10 @@ public class DependenciesManager {
 	/**
 	 * Sets the dependencies of the target project by manipulating the MANIFEST.MF of
 	 * <br>- the project accordingly.
-	 * @param projectName - name of the target project
 	 * @param info - the  <i>ModelSmellInfo</i> containing the data for the new smell
 	 */
-	public static void updateDependencies(String projectName, ModelSmellInfo info) {
-		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+	public static void updateDependencies(ModelSmellInfo info) {
+		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(info.getProjectName());
 		try {
 			URL newUrl = new URL(project.getLocationURI().toURL().toString()
 					+ MANIFEST_FILE);

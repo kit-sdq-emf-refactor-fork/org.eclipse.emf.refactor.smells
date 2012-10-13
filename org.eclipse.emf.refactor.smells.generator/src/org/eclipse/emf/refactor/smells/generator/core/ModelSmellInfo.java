@@ -60,7 +60,7 @@ public class ModelSmellInfo {
 	}
 	
 	public String getProjectPath() {
-		return project.getFullPath().toString();
+		return project.getLocation().toString();
 	}
 	
 	/**
