@@ -1,0 +1,20 @@
+<%@ jet package="org.eclipse.emf.refactor.smells" class="ModelSmellFinderClass"
+imports="org.eclipse.emf.refactor.smells.generator.core.ModelSmellInfo"%>
+<%ModelSmellInfo info = (ModelSmellInfo)argument; %>
+package <%=info.getPackage()%>;
+
+import java.util.LinkedList;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.refactor.smells.interfaces.IModelSmellFinderClass;
+
+
+public final class <%=info.getClassName()%> implements IModelSmellFinderClass {
+
+	@Override
+	public LinkedList<LinkedList<EObject>> findSmell(EObject root) {
+		LinkedList<LinkedList<EObject>> results = new LinkedList<LinkedList<EObject>>();
+		// TODO Fill results
+		return results;
+	}
+	
+}
