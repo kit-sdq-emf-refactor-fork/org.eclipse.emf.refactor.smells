@@ -6,6 +6,7 @@ Bundle-Version: 0.7.0.qualifier
 Bundle-Activator: org.eclipse.emf.refactor.smells.henshin.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
+ org.eclipse.core.resources;bundle-version="3.8.0",
  org.eclipse.emf.refactor.smells;bundle-version="0.7.0",
  org.eclipse.emf.refactor.smells.generator;bundle-version="0.7.0",
  org.eclipse.emf.henshin.interpreter;bundle-version="0.9.2"
