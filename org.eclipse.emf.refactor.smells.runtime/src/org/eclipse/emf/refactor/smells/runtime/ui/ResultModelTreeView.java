@@ -246,6 +246,7 @@ public class ResultModelTreeView extends ViewPart {
 	}
 
 	private void fillLocalPullDown(IMenuManager manager) {
+		barMM = manager;
 		manager.add(saveAction);
 		manager.add(clearAction);
 		manager.add(new Separator());
@@ -259,6 +260,7 @@ public class ResultModelTreeView extends ViewPart {
 	}
 
 	private void fillLocalToolBar(IToolBarManager manager) {
+		toolbarMM = manager;
 		manager.add(saveAction);
 		manager.add(clearAction);
 	}

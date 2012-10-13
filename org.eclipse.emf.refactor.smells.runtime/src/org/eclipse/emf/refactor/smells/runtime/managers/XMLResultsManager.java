@@ -95,6 +95,7 @@ public class XMLResultsManager extends XMLManager {
 		for(EAttribute attribute : eObject.eClass().getEAllAttributes()){
 			if (attribute.getName().equals(NAME_ATT)) {
 				ret = (String) eObject.eGet(attribute);
+				if (ret == null) ret = "";
 				break;
 			}
 		}

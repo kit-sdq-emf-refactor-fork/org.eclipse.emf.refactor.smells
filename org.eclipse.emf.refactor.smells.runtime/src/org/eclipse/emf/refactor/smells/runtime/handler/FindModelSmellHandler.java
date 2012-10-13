@@ -69,6 +69,7 @@ public class FindModelSmellHandler implements IHandler {
 					shell,
 					"EMF Quality Assurance: Error when trying to execute smell search",
 					ex.toString());
+			ex.printStackTrace();
 			}
 		} finally {
 			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell().setCursor(oldCursor);
