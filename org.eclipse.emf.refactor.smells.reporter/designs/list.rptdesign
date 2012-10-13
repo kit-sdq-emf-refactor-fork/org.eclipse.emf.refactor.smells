@@ -1,0 +1,655 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.17" id="1">
+    <property name="createdBy">Eclipse BIRT Designer Version 2.3.2.r232_20090202 Build &lt;2.3.2.v20090218-0730></property>
+    <property name="units">in</property>
+    <property name="iconFile">/templates/simple_listing.gif</property>
+    <property name="cheatSheet">org.eclipse.birt.report.designer.ui.cheatsheet.simplelisting</property>
+    <property name="layoutPreference">fixed layout</property>
+    <property name="bidiLayoutOrientation">ltr</property>
+    <parameters>
+        <scalar-parameter name="XmlUrl" id="44">
+            <property name="valueType">static</property>
+            <property name="dataType">string</property>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+            <property name="defaultValue">C:\Users\arendt\Desktop\smells.xml</property>
+            <property name="distinct">true</property>
+            <structure name="format">
+                <property name="category">Unformatted</property>
+            </structure>
+        </scalar-parameter>
+    </parameters>
+    <data-sources>
+        <oda-data-source extensionID="org.eclipse.datatools.enablement.oda.xml" name="XML Data Source" id="43">
+            <method name="beforeOpen"><![CDATA[this.setExtensionProperty("FILELIST", params["XmlUrl"]);]]></method>
+        </oda-data-source>
+    </data-sources>
+    <data-sets>
+        <oda-data-set extensionID="org.eclipse.datatools.enablement.oda.xml.dataSet" name="Data Set" id="45">
+            <structure name="cachedMetaData">
+                <list-property name="resultSet">
+                    <structure>
+                        <property name="position">1</property>
+                        <property name="name">analysis</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">2</property>
+                        <property name="name">date</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">3</property>
+                        <property name="name">file</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">4</property>
+                        <property name="name">name</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">5</property>
+                        <property name="name">description</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">6</property>
+                        <property name="name">totalnumber</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">7</property>
+                        <property name="name">number</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">8</property>
+                        <property name="name">element</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                </list-property>
+            </structure>
+            <property name="dataSource">XML Data Source</property>
+            <list-property name="resultSet">
+                <structure>
+                    <property name="position">1</property>
+                    <property name="name">analysis</property>
+                    <property name="nativeName">analysis</property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
+                </structure>
+                <structure>
+                    <property name="position">2</property>
+                    <property name="name">date</property>
+                    <property name="nativeName">date</property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
+                </structure>
+                <structure>
+                    <property name="position">3</property>
+                    <property name="name">file</property>
+                    <property name="nativeName">file</property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
+                </structure>
+                <structure>
+                    <property name="position">4</property>
+                    <property name="name">name</property>
+                    <property name="nativeName">name</property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
+                </structure>
+                <structure>
+                    <property name="position">5</property>
+                    <property name="name">description</property>
+                    <property name="nativeName">description</property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
+                </structure>
+                <structure>
+                    <property name="position">6</property>
+                    <property name="name">totalnumber</property>
+                    <property name="nativeName">totalnumber</property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
+                </structure>
+                <structure>
+                    <property name="position">7</property>
+                    <property name="name">number</property>
+                    <property name="nativeName">number</property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
+                </structure>
+                <structure>
+                    <property name="position">8</property>
+                    <property name="name">element</property>
+                    <property name="nativeName">element</property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
+                </structure>
+            </list-property>
+            <property name="queryText">table0#-TNAME-#table0#:#[/results/result/smell/elements/element]#:#{analysis;STRING;../../../@number},{date;STRING;../../../@date},{file;STRING;../../../@file},{name;STRING;../../@name},{description;STRING;../../@description},{totalnumber;STRING;../../@number},{number;STRING;../@number},{element;STRING;}</property>
+            <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<model:DesignValues xmlns:design="http://www.eclipse.org/datatools/connectivity/oda/design" xmlns:model="http://www.eclipse.org/birt/report/model/adapter/odaModel">
+  <Version>1.0</Version>
+  <design:ResultSets derivedMetaData="true">
+    <design:resultSetDefinitions>
+      <design:resultSetColumns>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:name>date</design:name>
+            <design:position>1</design:position>
+            <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
+            <design:precision>-1</design:precision>
+            <design:scale>-1</design:scale>
+            <design:nullability>Unknown</design:nullability>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>date</design:label>
+            <design:formattingHints/>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:name>file</design:name>
+            <design:position>2</design:position>
+            <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
+            <design:precision>-1</design:precision>
+            <design:scale>-1</design:scale>
+            <design:nullability>Unknown</design:nullability>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>file</design:label>
+            <design:formattingHints/>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:name>name</design:name>
+            <design:position>3</design:position>
+            <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
+            <design:precision>-1</design:precision>
+            <design:scale>-1</design:scale>
+            <design:nullability>Unknown</design:nullability>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>name</design:label>
+            <design:formattingHints/>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:name>description</design:name>
+            <design:position>4</design:position>
+            <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
+            <design:precision>-1</design:precision>
+            <design:scale>-1</design:scale>
+            <design:nullability>Unknown</design:nullability>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>description</design:label>
+            <design:formattingHints/>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:name>number</design:name>
+            <design:position>5</design:position>
+            <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
+            <design:precision>-1</design:precision>
+            <design:scale>-1</design:scale>
+            <design:nullability>Unknown</design:nullability>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>number</design:label>
+            <design:formattingHints/>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:name>elements</design:name>
+            <design:position>6</design:position>
+            <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
+            <design:precision>-1</design:precision>
+            <design:scale>-1</design:scale>
+            <design:nullability>Unknown</design:nullability>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>elements</design:label>
+            <design:formattingHints/>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:name>element</design:name>
+            <design:position>7</design:position>
+            <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
+            <design:precision>-1</design:precision>
+            <design:scale>-1</design:scale>
+            <design:nullability>Unknown</design:nullability>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>element</design:label>
+            <design:formattingHints/>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+      </design:resultSetColumns>
+    </design:resultSetDefinitions>
+  </design:ResultSets>
+</model:DesignValues>]]></xml-property>
+            <list-property name="privateDriverProperties">
+                <ex-property>
+                    <name>MAX_ROW</name>
+                    <value>-1</value>
+                </ex-property>
+                <ex-property>
+                    <name>XML_FILE</name>
+                </ex-property>
+            </list-property>
+        </oda-data-set>
+    </data-sets>
+    <styles>
+        <style name="report" id="38">
+            <property name="fontFamily">"Verdana"</property>
+            <property name="fontSize">10pt</property>
+        </style>
+        <style name="crosstab" id="41">
+            <property name="borderBottomColor">#CCCCCC</property>
+            <property name="borderBottomStyle">solid</property>
+            <property name="borderBottomWidth">1pt</property>
+            <property name="borderLeftColor">#CCCCCC</property>
+            <property name="borderLeftStyle">solid</property>
+            <property name="borderLeftWidth">1pt</property>
+            <property name="borderRightColor">#CCCCCC</property>
+            <property name="borderRightStyle">solid</property>
+            <property name="borderRightWidth">1pt</property>
+            <property name="borderTopColor">#CCCCCC</property>
+            <property name="borderTopStyle">solid</property>
+            <property name="borderTopWidth">1pt</property>
+        </style>
+        <style name="crosstab-cell" id="42">
+            <property name="borderBottomColor">#CCCCCC</property>
+            <property name="borderBottomStyle">solid</property>
+            <property name="borderBottomWidth">1pt</property>
+            <property name="borderLeftColor">#CCCCCC</property>
+            <property name="borderLeftStyle">solid</property>
+            <property name="borderLeftWidth">1pt</property>
+            <property name="borderRightColor">#CCCCCC</property>
+            <property name="borderRightStyle">solid</property>
+            <property name="borderRightWidth">1pt</property>
+            <property name="borderTopColor">#CCCCCC</property>
+            <property name="borderTopStyle">solid</property>
+            <property name="borderTopWidth">1pt</property>
+        </style>
+    </styles>
+    <page-setup>
+        <simple-master-page name="Simple MasterPage" id="2">
+            <property name="topMargin">0.25in</property>
+            <property name="leftMargin">0.25in</property>
+            <property name="bottomMargin">0.25in</property>
+            <property name="rightMargin">0.25in</property>
+            <page-footer>
+                <grid id="3">
+                    <property name="width">100%</property>
+                    <column id="4"/>
+                    <row id="5">
+                        <cell id="6">
+                            <text id="7">
+                                <property name="contentType">html</property>
+                                <text-property name="content"><![CDATA[<value-of>new Date()</value-of>]]></text-property>
+                            </text>
+                        </cell>
+                    </row>
+                </grid>
+            </page-footer>
+        </simple-master-page>
+    </page-setup>
+    <body>
+        <grid id="8">
+            <property name="height">0.6166666666666667in</property>
+            <property name="width">8.008333333333333in</property>
+            <column id="9">
+                <property name="width">8.008333333333333in</property>
+            </column>
+            <row id="10">
+                <property name="height">0.6166666666666667in</property>
+                <property name="verticalAlign">text-bottom</property>
+                <cell id="11">
+                    <property name="verticalAlign">top</property>
+                    <label id="12">
+                        <property name="backgroundColor">#575757</property>
+                        <property name="fontFamily">sans-serif</property>
+                        <property name="fontSize">24pt</property>
+                        <property name="fontWeight">bold</property>
+                        <property name="color">white</property>
+                        <property name="textUnderline">none</property>
+                        <property name="textAlign">center</property>
+                        <text-property name="text">Smell Detection Analysis Report</text-property>
+                    </label>
+                </cell>
+            </row>
+        </grid>
+        <table name="table1" id="13">
+            <property name="width">100%</property>
+            <property name="dataSet">Data Set</property>
+            <list-property name="boundDataColumns">
+                <structure>
+                    <property name="name">analysis</property>
+                    <property name="displayName">analysis</property>
+                    <expression name="expression">dataSetRow["analysis"]</expression>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="name">file</property>
+                    <property name="displayName">file</property>
+                    <expression name="expression">dataSetRow["file"]</expression>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="name">date</property>
+                    <property name="displayName">date</property>
+                    <expression name="expression">dataSetRow["date"]</expression>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="name">name</property>
+                    <property name="displayName">name</property>
+                    <expression name="expression">dataSetRow["name"]</expression>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="name">description</property>
+                    <property name="displayName">description</property>
+                    <expression name="expression">dataSetRow["description"]</expression>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="name">totalnumber</property>
+                    <property name="displayName">totalnumber</property>
+                    <expression name="expression">dataSetRow["totalnumber"]</expression>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="name">number</property>
+                    <property name="displayName">number</property>
+                    <expression name="expression">dataSetRow["number"]</expression>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="name">element</property>
+                    <property name="displayName">element</property>
+                    <expression name="expression">dataSetRow["element"]</expression>
+                    <property name="dataType">string</property>
+                </structure>
+            </list-property>
+            <property name="pageBreakInterval">50</property>
+            <column id="35">
+                <property name="width">22%</property>
+            </column>
+            <column id="206">
+                <property name="width">2%</property>
+            </column>
+            <column id="36">
+                <property name="width">76%</property>
+            </column>
+            <header>
+                <row id="14">
+                    <cell id="15"/>
+                    <cell id="188"/>
+                    <cell id="16"/>
+                </row>
+            </header>
+            <group id="46">
+                <property name="groupName">analysisGroup</property>
+                <property name="interval">none</property>
+                <property name="sortDirection">asc</property>
+                <expression name="keyExpr">row["analysis"]</expression>
+                <structure name="toc">
+                    <expression name="expressionValue">row["analysis"]</expression>
+                </structure>
+                <property name="repeatHeader">true</property>
+                <property name="hideDetail">false</property>
+                <property name="pageBreakAfter">auto</property>
+                <property name="pageBreakBefore">auto</property>
+                <property name="pageBreakInside">auto</property>
+                <header>
+                    <row id="209">
+                        <property name="fontSize">14pt</property>
+                        <cell id="210">
+                            <label id="213">
+                                <property name="fontSize">10pt</property>
+                            </label>
+                        </cell>
+                        <cell id="211"/>
+                        <cell id="212"/>
+                    </row>
+                    <row id="47">
+                        <property name="backgroundColor">#FF9B9B</property>
+                        <property name="fontSize">14pt</property>
+                        <cell id="48">
+                            <label id="64">
+                                <text-property name="text">Analysis No.</text-property>
+                            </label>
+                        </cell>
+                        <cell id="189"/>
+                        <cell id="49">
+                            <data id="83">
+                                <property name="resultSetColumn">analysis</property>
+                            </data>
+                        </cell>
+                    </row>
+                    <row id="84">
+                        <property name="backgroundColor">#FF9B9B</property>
+                        <property name="fontSize">14pt</property>
+                        <cell id="85">
+                            <label id="75">
+                                <text-property name="text">Analysed File</text-property>
+                            </label>
+                        </cell>
+                        <cell id="190"/>
+                        <cell id="86">
+                            <data id="76">
+                                <property name="resultSetColumn">file</property>
+                            </data>
+                        </cell>
+                    </row>
+                    <row id="88">
+                        <property name="backgroundColor">#FF9B9B</property>
+                        <property name="fontSize">14pt</property>
+                        <cell id="89">
+                            <label id="81">
+                                <text-property name="text">Date of Analysis</text-property>
+                            </label>
+                        </cell>
+                        <cell id="191"/>
+                        <cell id="90">
+                            <data id="101">
+                                <property name="resultSetColumn">date</property>
+                            </data>
+                        </cell>
+                    </row>
+                </header>
+                <footer>
+                    <row id="51">
+                        <cell id="52"/>
+                        <cell id="204"/>
+                        <cell id="53"/>
+                    </row>
+                </footer>
+            </group>
+            <group id="102">
+                <property name="groupName">smellGroup</property>
+                <property name="interval">none</property>
+                <property name="sortDirection">asc</property>
+                <expression name="keyExpr">row["name"]</expression>
+                <structure name="toc">
+                    <expression name="expressionValue">row["name"]</expression>
+                </structure>
+                <property name="repeatHeader">true</property>
+                <property name="hideDetail">false</property>
+                <property name="pageBreakAfter">auto</property>
+                <property name="pageBreakBefore">auto</property>
+                <property name="pageBreakInside">auto</property>
+                <header>
+                    <row id="169">
+                        <cell id="170">
+                            <label id="172"/>
+                        </cell>
+                        <cell id="192"/>
+                        <cell id="171"/>
+                    </row>
+                    <row id="103">
+                        <property name="backgroundColor">#AEFFAE</property>
+                        <property name="fontSize">12pt</property>
+                        <cell id="104">
+                            <label id="111">
+                                <text-property name="text">Smell</text-property>
+                            </label>
+                        </cell>
+                        <cell id="193"/>
+                        <cell id="105">
+                            <data id="113">
+                                <property name="resultSetColumn">name</property>
+                            </data>
+                        </cell>
+                    </row>
+                    <row id="214">
+                        <cell id="215">
+                            <property name="fontSize">6pt</property>
+                            <property name="fontVariant">normal</property>
+                            <label id="218">
+                                <property name="fontSize">2pt</property>
+                            </label>
+                        </cell>
+                        <cell id="216"/>
+                        <cell id="217"/>
+                    </row>
+                    <row id="114">
+                        <property name="backgroundColor">#D9FFD9</property>
+                        <cell id="115">
+                            <label id="118">
+                                <text-property name="text">Description</text-property>
+                            </label>
+                        </cell>
+                        <cell id="194"/>
+                        <cell id="116">
+                            <data id="124">
+                                <property name="resultSetColumn">description</property>
+                            </data>
+                        </cell>
+                    </row>
+                    <row id="119">
+                        <property name="backgroundColor">#D9FFD9</property>
+                        <cell id="120">
+                            <label id="123">
+                                <text-property name="text">Occurrences</text-property>
+                            </label>
+                        </cell>
+                        <cell id="195"/>
+                        <cell id="121">
+                            <data id="125">
+                                <property name="resultSetColumn">totalnumber</property>
+                            </data>
+                        </cell>
+                    </row>
+                </header>
+                <footer>
+                    <row id="107">
+                        <cell id="108">
+                            <label id="207"/>
+                        </cell>
+                        <cell id="203"/>
+                        <cell id="109"/>
+                    </row>
+                </footer>
+            </group>
+            <group id="126">
+                <property name="groupName">occurrenceGroup</property>
+                <property name="interval">none</property>
+                <property name="sortDirection">asc</property>
+                <expression name="keyExpr">row["number"]</expression>
+                <structure name="toc">
+                    <expression name="expressionValue">row["number"]</expression>
+                </structure>
+                <property name="repeatHeader">true</property>
+                <property name="hideDetail">false</property>
+                <property name="pageBreakAfter">auto</property>
+                <property name="pageBreakBefore">auto</property>
+                <property name="pageBreakInside">auto</property>
+                <header>
+                    <row id="173">
+                        <cell id="174">
+                            <label id="176">
+                                <text-property name="text"></text-property>
+                            </label>
+                        </cell>
+                        <cell id="196"/>
+                        <cell id="175"/>
+                    </row>
+                    <row id="127">
+                        <property name="backgroundColor">#FFFFB0</property>
+                        <cell id="128">
+                            <label id="152">
+                                <property name="textAlign">right</property>
+                                <property name="widows">2</property>
+                                <text-property name="text">Occurrence No.</text-property>
+                            </label>
+                        </cell>
+                        <cell id="197"/>
+                        <cell id="129">
+                            <data id="151">
+                                <property name="resultSetColumn">number</property>
+                            </data>
+                        </cell>
+                    </row>
+                </header>
+                <footer>
+                    <row id="131">
+                        <cell id="132"/>
+                        <cell id="202"/>
+                        <cell id="133"/>
+                    </row>
+                </footer>
+            </group>
+            <group id="156">
+                <property name="groupName">elementGroup</property>
+                <property name="interval">none</property>
+                <property name="sortDirection">asc</property>
+                <expression name="keyExpr">row["element"]</expression>
+                <structure name="toc">
+                    <expression name="expressionValue">row["element"]</expression>
+                </structure>
+                <property name="repeatHeader">true</property>
+                <property name="hideDetail">false</property>
+                <property name="pageBreakAfter">auto</property>
+                <property name="pageBreakBefore">auto</property>
+                <property name="pageBreakInside">auto</property>
+                <header>
+                    <row id="157">
+                        <cell id="158">
+                            <label id="153">
+                                <property name="textAlign">right</property>
+                                <property name="widows">2</property>
+                                <text-property name="text">Involved Element</text-property>
+                            </label>
+                        </cell>
+                        <cell id="198"/>
+                        <cell id="159">
+                            <data id="155">
+                                <property name="resultSetColumn">element</property>
+                            </data>
+                        </cell>
+                    </row>
+                </header>
+            </group>
+            <footer>
+                <row id="31">
+                    <cell id="32"/>
+                    <cell id="205"/>
+                    <cell id="33"/>
+                </row>
+            </footer>
+        </table>
+    </body>
+</report>
