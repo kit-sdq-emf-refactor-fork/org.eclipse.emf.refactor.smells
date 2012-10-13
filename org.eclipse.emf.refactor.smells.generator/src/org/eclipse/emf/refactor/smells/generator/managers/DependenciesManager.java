@@ -24,11 +24,11 @@ import org.eclipse.emf.refactor.smells.generator.core.ModelSmellInfo;
 
 public class DependenciesManager {
 
-	private final static String ECORE = "org.eclipse.emf.ecore";
-	private final static String REFACTOR_SMELLS = "org.eclipse.emf.refactor.smells";
+	protected final static String ECORE = "org.eclipse.emf.ecore";
+	protected final static String REFACTOR_SMELLS = "org.eclipse.emf.refactor.smells";
 	private final static String REFACTOR_METRICS = "org.eclipse.emf.refactor.metrics";
-	private final static String REQ_BUNDLE = "Require-Bundle";
-	private final static String MANIFEST_FILE = "/META-INF/MANIFEST.MF";
+	protected final static String REQ_BUNDLE = "Require-Bundle";
+	protected final static String MANIFEST_FILE = "/META-INF/MANIFEST.MF";
 	
 	/**
 	 * Sets the dependencies of the target project by manipulating the MANIFEST.MF of
