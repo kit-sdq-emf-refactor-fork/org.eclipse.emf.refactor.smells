@@ -178,7 +178,7 @@ public class HenshinDataWizardPage extends WizardPage implements Listener {
 //		return pre;
 //	}
 
-	public String getTransf() {
+	public String getTransformation() {
 		return transf;
 	}
 
