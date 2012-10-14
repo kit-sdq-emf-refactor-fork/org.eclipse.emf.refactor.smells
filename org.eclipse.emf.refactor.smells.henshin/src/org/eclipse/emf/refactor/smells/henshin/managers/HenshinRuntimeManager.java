@@ -45,4 +45,11 @@ public class HenshinRuntimeManager {
 		
 		return  result;
 	}
+	
+	public static boolean isModelSmellFile(String path){
+		TransformationSystem transformationSystem = (TransformationSystem) ModelHelper.loadFile(path);
+		Rule rule = (Rule) transformationSystem.findRuleByName(MAIN_RULE);
+		return  (rule != null); //&& param != null;
+	}
 }
+
