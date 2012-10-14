@@ -34,7 +34,7 @@ public class GenerationManager {
 	private static final String METRIC_TEMPLATE_CLASS_NAME = "MetricBasedFinderClassTemplate";
 	protected static final  String TEMPLATE_DIR = "/templates";
 	private static final String SOURCE_DIR = "/src/";
-	private static final  String TEMPLATE_FILE_EXTENSION = ".javajet";
+	protected static final  String TEMPLATE_FILE_EXTENSION = ".javajet";
 	private static final String JAVA_FILE_EXTENSION = ".java";		
 	protected static final String PLUGINSPATH = Platform.getInstallLocation().getURL().getPath() + "plugins/";
 	protected static final String BUNDLEVERSION = "Bundle-Version";
@@ -47,7 +47,7 @@ public class GenerationManager {
 		System.out.println("GenerationManager initialized!");
 	}
 	
-	private List<IClasspathEntry> setClassPathEntries() {
+	protected List<IClasspathEntry> setClassPathEntries() {
 		ArrayList<IClasspathEntry> cpe = new ArrayList<IClasspathEntry>();
 		Bundle bundle = Platform.getBundle(Activator.PLUGIN_ID);
 		// add org.eclipse.emf.refactor.smells.generator to class path
