@@ -11,6 +11,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.refactor.smells.generator.interfaces.INewModelSmellWizard;
 import org.eclipse.emf.refactor.smells.generator.ui.ModelSmellDataPage;
 import org.eclipse.emf.refactor.smells.henshin.core.HenshinModelSmellInfo;
+import org.eclipse.emf.refactor.smells.henshin.managers.HenshinGenerationManager;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
