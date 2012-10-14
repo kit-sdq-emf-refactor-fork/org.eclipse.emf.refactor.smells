@@ -22,7 +22,7 @@ import org.osgi.framework.Bundle;
 
 public class HenshinGenerationManager extends GenerationManager {
 	
-	private static final String HENSHIN_TEMPLATE_CLASS_NAME = "HenshinCalculateClassTemplate";
+	private static final String HENSHIN_TEMPLATE_CLASS_NAME = "HenshinFinderClassTemplate";
 	private static HenshinGenerationManager instance;
 	
 	private HenshinGenerationManager() {
@@ -48,7 +48,7 @@ public class HenshinGenerationManager extends GenerationManager {
 	    return cpe;
 	}
 	
-	public static void createNew(IProgressMonitor monitor,
+	public static void createNewModelSmell(IProgressMonitor monitor,
 			HenshinModelSmellInfo modelSmellInfo, IProject targetProject) {
 		System.out.println(modelSmellInfo);
 		HenshinDependenciesManager.updateDependencies(modelSmellInfo);

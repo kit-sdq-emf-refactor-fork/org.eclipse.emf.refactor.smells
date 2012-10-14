@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            category="org.eclipse.emf.refactor.newwizards.category"
+            class="org.eclipse.emf.refactor.smells.henshin.ui.NewModelSmellWizardHenshin"
+            icon="icons/modelsmell.PNG"
+            id="org.eclipse.emf.refactor.smells.newwizard"
+            name="Model Smell (specified in Henshin)">
+      </wizard>
+   </extension>
+
+</plugin>
