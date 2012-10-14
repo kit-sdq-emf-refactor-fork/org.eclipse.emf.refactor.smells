@@ -67,7 +67,7 @@ public class FindModelSmellHandler implements IHandler {
 			} else {
 			MessageDialog.openError(
 					shell,
-					"EMF Quality Assurance: Error when trying to execute smell search",
+					"EMF Quality Assurance: Error when trying to execute smell search", 
 					ex.toString());
 			ex.printStackTrace();
 			}

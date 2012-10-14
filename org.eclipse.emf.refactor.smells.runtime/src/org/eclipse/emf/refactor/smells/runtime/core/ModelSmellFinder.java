@@ -46,7 +46,7 @@ public class ModelSmellFinder {
 		return results;
 	}
 	
-	private static Result findModelSmell(ModelSmell smell){
+	private static Result findModelSmell(ModelSmell smell) {
 		LinkedList<LinkedList<EObject>> modelelements = smell.getFinderClass().findSmell(rootElement);
 		return new Result(smell, modelelements);
 	}
