@@ -27,7 +27,8 @@ public class ModelSmellLoader {
 				.getConfigurationElementsFor(ExtensionPointTags.EXTENSION_POINT_NAME);
 		for (IConfigurationElement element : rawSmells) {
 			try {
-				if (element.getName().equals(ExtensionPointTags.MODELSMELL_TAG)) {					
+				if (element.getName().equals(ExtensionPointTags.MODELSMELL_TAG)) {	
+					System.out.println(element);
 					ModelSmell smell = createModelSmell(element);
 					if (null != smell) {
 						smells.add(smell);
