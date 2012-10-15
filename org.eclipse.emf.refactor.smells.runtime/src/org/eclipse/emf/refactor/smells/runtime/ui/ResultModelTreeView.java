@@ -98,12 +98,16 @@ public class ResultModelTreeView extends ViewPart {
 				 IEditorPart editorPart = null;
 				 if(event.getSelection() instanceof IStructuredSelection) {
 					 editorPart = openEditor((IStructuredSelection)event.getSelection());
+					 StructuredSelection ss = (StructuredSelection) event.getSelection();
+					 Object selection = ss.getFirstElement();
+					 if (selection instanceof EObject || selection instanceof EObjectGroup) {
+						 doAdditionalHighlightings();
+					 }
 				 }
 				 if(editorPart != null && editorPart instanceof IViewerProvider){
 					 setSelectionInModel((IViewerProvider)editorPart, (IStructuredSelection)event.getSelection());
 //						 ((IViewerProvider)editorPart).getViewer().setSelection(event.getSelection(), true);
 				 }
-				 doAdditionalHighlightings();
 			}
 			
 			private void setSelectionInModel(IViewerProvider provider, IStructuredSelection selection){
