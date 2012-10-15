@@ -41,6 +41,7 @@ public class ModelSmellFinder {
 		LinkedList<Result> results = new LinkedList<Result>();
 		for(ModelSmell smell : smells){
 			if(smell.getMetamodel().equals(nsUri))
+				System.out.println("find smell: " + smell.getName());
 				results.add(findModelSmell(smell));
 		}
 		return results;
@@ -48,6 +49,7 @@ public class ModelSmellFinder {
 	
 	private static Result findModelSmell(ModelSmell smell) {
 		LinkedList<LinkedList<EObject>> modelelements = smell.getFinderClass().findSmell(rootElement);
+		System.out.println("found: " + modelelements.size());
 		return new Result(smell, modelelements);
 	}
 

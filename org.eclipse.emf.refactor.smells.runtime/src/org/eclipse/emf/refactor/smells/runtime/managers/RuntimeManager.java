@@ -12,6 +12,7 @@ import org.eclipse.emf.refactor.smells.configuration.managers.ConfigurationManag
 import org.eclipse.emf.refactor.smells.core.MetricBasedModelSmellFinderClass;
 import org.eclipse.emf.refactor.smells.core.ModelSmell;
 import org.eclipse.emf.refactor.smells.core.ModelSmellLoader;
+import org.eclipse.emf.refactor.smells.interfaces.IHighlighting;
 import org.eclipse.emf.refactor.smells.runtime.core.ModelSmellFinder;
 import org.eclipse.emf.refactor.smells.runtime.core.Result;
 import org.eclipse.emf.refactor.smells.runtime.core.ResultModel;
@@ -39,6 +40,7 @@ public class RuntimeManager {
 	private static LinkedList<ModelSmell> allSmells=null;
 	private static LinkedList<ResultModel> resultModels = new LinkedList<ResultModel>();
 	private static List<Action> additionalActions = new ArrayList<Action>();
+	private static List<IHighlighting> additionalHighlightings = new ArrayList<IHighlighting>();
 	private static ResultModelTreeViewer resultModelViewer;
 
 	private static IEditorPart editorPart = null;	
@@ -73,6 +75,16 @@ public class RuntimeManager {
 			additionalActions.add(action);
 		} else {
 			additionalActions.add(action);
+		}
+		return instance;
+	}
+	
+	public static RuntimeManager getInstance(IHighlighting highlighting) {
+		if (instance == null) {
+			instance = new RuntimeManager();
+			additionalHighlightings.add(highlighting);
+		} else {
+			additionalHighlightings.add(highlighting);
 		}
 		return instance;
 	}
@@ -129,6 +141,7 @@ public class RuntimeManager {
 			try {
 				page.showView(ResultModelTreeView.MENU_ID);
 				setAdditionalActionsToView(getSmellView());
+				setAdditionalHightightingsToView(getSmellView());
 			} catch (PartInitException e) {
 				e.printStackTrace();
 			}
@@ -150,6 +163,7 @@ public class RuntimeManager {
 		ResultModelTreeView view = getSmellView();
 		if (view != null) {
 			setAdditionalActionsToView(view);
+			setAdditionalHightightingsToView(getSmellView());
 			return true;
 		}
 		return false;
@@ -161,6 +175,13 @@ public class RuntimeManager {
 			view.addAction(action);
 		}
 		view.addActionsToMenu();
+	}
+	
+	private static void setAdditionalHightightingsToView(ResultModelTreeView view) {
+		for (IHighlighting highlighting : additionalHighlightings) {
+			System.out.println("RuntimeManager: add highlighting '" + highlighting + "' to view!");
+			view.addHighlighting(highlighting);
+		}
 	}
 	
 	/**

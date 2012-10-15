@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.refactor.smells.interfaces.IHighlighting;
 import org.eclipse.emf.refactor.smells.runtime.core.EObjectGroup;
 import org.eclipse.emf.refactor.smells.runtime.core.ResultModel;
 import org.eclipse.emf.refactor.smells.runtime.managers.RuntimeManager;
@@ -57,6 +58,7 @@ public class ResultModelTreeView extends ViewPart {
 	private SaveAction saveAction;
 	private ClearAction clearAction;
 	private List<Action> additionalActions = new ArrayList<Action>();
+	private List<IHighlighting> additionalHighlightings = new ArrayList<IHighlighting>();
 	
 	private static IMenuManager barMM;
 	private static IToolBarManager toolbarMM;
@@ -101,6 +103,7 @@ public class ResultModelTreeView extends ViewPart {
 					 setSelectionInModel((IViewerProvider)editorPart, (IStructuredSelection)event.getSelection());
 //						 ((IViewerProvider)editorPart).getViewer().setSelection(event.getSelection(), true);
 				 }
+				 doAdditionalHighlightings();
 			}
 			
 			private void setSelectionInModel(IViewerProvider provider, IStructuredSelection selection){
@@ -201,6 +204,12 @@ public class ResultModelTreeView extends ViewPart {
 		contributeToActionBars();
 	}
 	
+	protected void doAdditionalHighlightings() {
+		for (IHighlighting highlighting : additionalHighlightings) {
+			highlighting.highlight();
+		}
+	}
+
 	private void hookContextMenu() {
 		MenuManager menuMgr = new MenuManager("#PopupMenu");
 		menuMgr.setRemoveAllWhenShown(true);
@@ -323,6 +332,10 @@ public class ResultModelTreeView extends ViewPart {
 			}
 		}
 		additionalActions.clear();
+	}
+	
+	public void addHighlighting(IHighlighting highlighting) {
+		additionalHighlightings.add(highlighting);
 	}
 
 }
