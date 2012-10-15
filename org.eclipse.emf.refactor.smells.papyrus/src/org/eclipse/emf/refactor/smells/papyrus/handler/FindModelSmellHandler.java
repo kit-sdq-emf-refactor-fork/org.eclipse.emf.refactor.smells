@@ -8,7 +8,9 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.refactor.smells.papyrus.managers.PapyrusManager;
 import org.eclipse.emf.refactor.smells.papyrus.managers.PapyrusSelectionManager;
+import org.eclipse.emf.refactor.smells.runtime.managers.RuntimeManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
@@ -32,10 +34,10 @@ public class FindModelSmellHandler implements IHandler {
 	@SuppressWarnings("finally")
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		System.out.println("Here we go ...");
 		Cursor oldCursor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell().getCursor();
 		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell().setCursor(new Cursor(null,SWT.CURSOR_WAIT));
 		ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
+		PapyrusManager.setComponents(PapyrusSelectionManager.getObject(selection));
 		selectedEObject = PapyrusSelectionManager.getEObject(selection);
 		if (selectedEObject == null) {	
 			MessageDialog.openError(
@@ -51,10 +53,10 @@ public class FindModelSmellHandler implements IHandler {
 				selectedFile = (IFile) ResourcesPlugin.getWorkspace().getRoot().findMember(path);
 			} 
 			selectedProject = selectedFile.getProject();
-//			RuntimeManager.getInstance();
-//			System.out.println("Root: " + selectedEObject);
-//			System.out.println("Project: " + selectedProject);
-//			RuntimeManager.findConfiguredModelSmells(selectedProject, selectedEObject, selectedFile);
+			RuntimeManager.getInstance();
+			System.out.println("Root: " + selectedEObject);
+			System.out.println("Project: " + selectedProject);
+			RuntimeManager.findConfiguredModelSmells(selectedProject, selectedEObject, selectedFile);
 		} catch (Exception ex) {
 			Throwable cause = ex.getCause();
 			if(!(cause == null) && cause.getClass().getName().equals("org.eclipse.emf.ecore.xmi.PackageNotFoundException")){

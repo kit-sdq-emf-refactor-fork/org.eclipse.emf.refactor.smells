@@ -37,4 +37,14 @@ public class PapyrusSelectionManager extends SelectionManager {
 		return ret;
 	}
 
+	public static Object getObject(ISelection selection) {
+		if (selection == null)
+			return null;
+		if (selection instanceof StructuredSelection) {
+			StructuredSelection ss = (StructuredSelection) selection;
+			return ss.getFirstElement();
+		}
+		return null;
+	}
+
 }

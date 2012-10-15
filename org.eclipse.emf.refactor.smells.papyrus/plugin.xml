@@ -3,6 +3,13 @@
 <plugin>
 
    <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="org.eclipse.emf.refactor.smells.papyrus.ReporterStartup">
+      </startup>
+   </extension>
+
+   <extension
          id="org.eclipse.emf.refactor.qa.menu"
          point="org.eclipse.ui.menus">
       <menuContribution
