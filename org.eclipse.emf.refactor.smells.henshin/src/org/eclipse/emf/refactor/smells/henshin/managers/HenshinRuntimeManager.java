@@ -12,11 +12,9 @@ import org.eclipse.emf.henshin.interpreter.impl.EGraphImpl;
 import org.eclipse.emf.henshin.interpreter.impl.EngineImpl;
 import org.eclipse.emf.henshin.interpreter.impl.RuleApplicationImpl;
 import org.eclipse.emf.henshin.interpreter.util.InterpreterUtil;
-import org.eclipse.emf.henshin.interpreter.util.ModelHelper;
+import org.eclipse.emf.henshin.model.Module;
 import org.eclipse.emf.henshin.model.Rule;
-import org.eclipse.emf.henshin.model.TransformationSystem;
 
-@SuppressWarnings("deprecation")
 public class HenshinRuntimeManager {
 
 	private final static String MAIN_RULE = "mainRule";
@@ -24,12 +22,12 @@ public class HenshinRuntimeManager {
 	public static LinkedList<LinkedList<EObject>> run(EObject rootElement, String henshinFilePath) {		
 		LinkedList<LinkedList<EObject>> result = new LinkedList<LinkedList<EObject>>();
 		EObject root = rootElement;
-		TransformationSystem transformationSystem = 
-				(TransformationSystem) ModelHelper.loadFile(henshinFilePath);			
+		Module module = 
+				(Module) HenshinFileManager.loadFile(henshinFilePath);			
 		EGraph graph = new EGraphImpl();
 		graph.addTree(root);		
 		Engine engine = new EngineImpl();
-		Rule rule = (Rule) transformationSystem.findRuleByName(MAIN_RULE);
+		Rule rule = (Rule) module.getUnit(MAIN_RULE);
 		
 		RuleApplication application = new RuleApplicationImpl(engine, graph, rule, null);
 		
@@ -47,9 +45,9 @@ public class HenshinRuntimeManager {
 	}
 	
 	public static boolean isModelSmellFile(String path){
-		TransformationSystem transformationSystem = (TransformationSystem) ModelHelper.loadFile(path);
-		Rule rule = (Rule) transformationSystem.findRuleByName(MAIN_RULE);
-		return  (rule != null); //&& param != null;
+		Module module = (Module) HenshinFileManager.loadFile(path);
+		Rule rule = (Rule) module.getUnit(MAIN_RULE);
+		return  (rule != null);
 	}
 }
 
