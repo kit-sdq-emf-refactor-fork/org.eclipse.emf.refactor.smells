@@ -8,7 +8,7 @@
             class="org.eclipse.emf.refactor.smells.henshin.ui.NewModelSmellWizardHenshin"
             icon="icons/modelsmell.PNG"
             id="org.eclipse.emf.refactor.smells.newwizard"
-            name="Model Smell (specified in Henshin)">
+            name="Smell (specified in Henshin)">
       </wizard>
    </extension>
 

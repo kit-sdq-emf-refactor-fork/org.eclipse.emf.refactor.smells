@@ -8,14 +8,14 @@
             class="org.eclipse.emf.refactor.smells.generator.ui.NewModelSmellWizardJava"
             icon="icons/modelsmell.PNG"
             id="org.eclipse.emf.refactor.smells.newwizard"
-            name="Model Smell (specified in Java)">
+            name="Smell (specified in Java)">
       </wizard>
       <wizard
             category="org.eclipse.emf.refactor.newwizards.category"
             class="org.eclipse.emf.refactor.smells.generator.ui.NewModelSmellWizardMetric"
             icon="icons/modelsmell.PNG"
             id="org.eclipse.emf.refactor.smells.newwizard"
-            name="Model Smell (based on a metric)">
+            name="Smell (based on a metric)">
       </wizard>
    </extension>
 
