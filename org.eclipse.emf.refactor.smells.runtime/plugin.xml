@@ -13,6 +13,7 @@
                label="EMF Quality Assurance (use existing techniques)">
             <command
                   commandId="org.eclipse.emf.refactor.smells.runtime.findModelSmellCommand"
+                  icon="icons/modelsmell.PNG"
                   label="Find Configured Model Smells"
                   style="push">
                <visibleWhen
