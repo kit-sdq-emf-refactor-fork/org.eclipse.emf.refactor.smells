@@ -25,25 +25,25 @@ public final class <%=info.getClassName()%> extends MetricBasedModelSmellFinderC
 		return findSmellyObjectGroups(root, globalLimit, localCalculateClass);
 	}
 	
-	private LinkedList<LinkedList<EObject>> findSmellyObjectGroups(EObject root, double globalLimit, 
-				IMetricCalculator localCalculateClass){
+	private LinkedList<LinkedList<EObject>> findSmellyObjectGroups(EObject object, double globalLimit, 
+				IMetricCalculator localCalculateClass) {
 		String context = localMetric.getContext();
-		LinkedList<LinkedList<EObject>> smellyEObjects = new LinkedList<LinkedList<EObject>>();
-		List<EObject> containedEObjects = root.eContents();
-		for(EObject object : containedEObjects){
-			String objectType = object.eClass().getInstanceClass().getSimpleName();
-			if(objectType.equals(context)){
-				LinkedList<EObject> rootList = new LinkedList<EObject>();
-				rootList.add(object);
-				localCalculateClass.setContext(rootList);
-				double localValue = localCalculateClass.calculate();
-				if (limitReached(localValue, globalLimit)) {
-					LinkedList<EObject> currentObjects = new LinkedList<EObject>();
-					currentObjects.add(object);
-					smellyEObjects.add((currentObjects));
-				}
-			} else {
-				smellyEObjects.addAll(findSmellyObjectGroups(object, globalLimit, localCalculateClass));
+		LinkedList<LinkedList<EObject>> smellyEObjects = new LinkedList<LinkedList<EObject>>();		
+		String objectType = object.eClass().getInstanceClass().getSimpleName();
+		if(objectType.equals(context)) {
+			LinkedList<EObject> rootList = new LinkedList<EObject>();
+			rootList.add(object);
+			localCalculateClass.setContext(rootList);
+			double localValue = localCalculateClass.calculate();
+			if (limitReached(localValue, globalLimit)) {
+				LinkedList<EObject> currentObjects = new LinkedList<EObject>();
+				currentObjects.add(object);
+				smellyEObjects.add((currentObjects));
+			}
+		} else {
+			List<EObject> containedEObjects = object.eContents();
+			for(EObject containedEObject : containedEObjects) {
+				smellyEObjects.addAll(findSmellyObjectGroups(containedEObject, globalLimit, localCalculateClass));
 			}
 		}
 		return smellyEObjects;
