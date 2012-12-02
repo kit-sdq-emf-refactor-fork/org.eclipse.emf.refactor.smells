@@ -34,9 +34,9 @@ public class MetricBasedModelSmellInfo extends ModelSmellInfo {
 			return comparator;
 	}
 
-	@Override
-	public String getDescription() {
-		String descriptionText = super.getDescription();
-		return descriptionText + " ('value " + comparator + " limit' indicates this smell)";
-	}
+//	@Override
+//	public String getDescription() {
+//		String descriptionText = super.getDescription();
+//		return descriptionText + " ('value " + comparator + " limit' indicates this smell)";
+//	}
 }
