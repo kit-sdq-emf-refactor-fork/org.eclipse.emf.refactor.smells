@@ -1,6 +1,6 @@
 package org.eclipse.emf.refactor.smells.core;
 
-import org.eclipse.emf.refactor.smells.interfaces.IModelSmellFinderClass;
+import org.eclipse.emf.refactor.smells.interfaces.IModelSmellFinder;
 
 /**
  * Wrapper class for the single smell plugins.
@@ -14,7 +14,7 @@ public class ModelSmell {
 	private String name;
 	private String description;
 	private String metamodel;
-	private IModelSmellFinderClass finderClass;
+	private IModelSmellFinder finderClass;
 
 	/**
 	 * The constructor that creates a new <i>ModelSmell</i> object.
@@ -26,7 +26,7 @@ public class ModelSmell {
 	 * @param id
 	 */
 	public ModelSmell(String name, String description, String metamodel,
-			IModelSmellFinderClass finderClass, String id) {
+			IModelSmellFinder finderClass, String id) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
@@ -52,7 +52,7 @@ public class ModelSmell {
 		return metamodel;
 	}
 
-	public IModelSmellFinderClass getFinderClass() {
+	public IModelSmellFinder getFinderClass() {
 		return finderClass;
 	}
 

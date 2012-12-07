@@ -4,7 +4,7 @@ import java.util.LinkedList;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.emf.refactor.smells.interfaces.IModelSmellFinderClass;
+import org.eclipse.emf.refactor.smells.interfaces.IModelSmellFinder;
 
 /**
  * Loader class for the installed EMF Smells plugins. It wraps the plugins into
@@ -49,7 +49,7 @@ public class ModelSmellLoader {
 					.getAttribute(ExtensionPointTags.MODELSMELL_DESCRIPTION_TAG);
 			final String metamodel = element
 					.getAttribute(ExtensionPointTags.MODELSMELL_METAMODEL_TAG);
-			final IModelSmellFinderClass finderClass = (IModelSmellFinderClass) 
+			final IModelSmellFinder finderClass = (IModelSmellFinder) 
 					element.createExecutableExtension(ExtensionPointTags.MODELSMELL_FINDER_CLASS_TAG);
 			return new ModelSmell(name, description, metamodel, finderClass, id);
 		} catch (Throwable e) {

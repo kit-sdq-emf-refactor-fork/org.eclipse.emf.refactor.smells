@@ -69,7 +69,7 @@
                   The java class executed when triggering the search for a modelsmell.
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn=":org.eclipse.emf.refactor.smells.interfaces.IModelSmellFinderClass"/>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.emf.refactor.smells.interfaces.IModelSmellFinder"/>
                </appinfo>
             </annotation>
          </attribute>

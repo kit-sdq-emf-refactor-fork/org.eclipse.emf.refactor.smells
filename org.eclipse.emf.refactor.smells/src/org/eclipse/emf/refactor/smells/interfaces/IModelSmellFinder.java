@@ -11,7 +11,7 @@ import org.eclipse.emf.ecore.EObject;
  *
  */
 
-public interface IModelSmellFinderClass {
+public interface IModelSmellFinder {
 	
 	abstract public LinkedList<LinkedList<EObject>> findSmell(EObject root);
 	
