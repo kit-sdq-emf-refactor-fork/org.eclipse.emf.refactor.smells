@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension-point id="org.eclipse.emf.refactor.refactoringtosmells" name="RefactoringToSmells" schema="schema/refactoringtosmells.exsd"/>
+   <extension-point id="org.eclipse.emf.refactor.smelltorefactorings" name="SmellToRefactorings" schema="schema/smelltorefactorings.exsd"/>
+   
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="false"
+            id="de.unimarburg.swt.emf.fix.objectContribution2"
+            objectClass="org.eclipse.emf.refactor.smells.runtime.core.EObjectGroup">
+         <action
+               class="org.eclipse.emf.refactor.smells.eraser.handler.SuggestRefactoringAction"
+               icon="icons/refactoring.png"
+               id="org.eclipse.emf.refactor.smells.eraser.suggestRefactoringAction"
+               label="Suggest Refactorings">
+         </action>
+      </objectContribution>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            category="org.eclipse.emf.refactor.propertypage"
+            class="org.eclipse.emf.refactor.smells.eraser.ui.RelationsPropertyPage"
+            id="org.eclipse.emf.refactor.smells.eraser"
+            name="Quick Fix Relations">
+      </page>
+   </extension>
+
+</plugin>
