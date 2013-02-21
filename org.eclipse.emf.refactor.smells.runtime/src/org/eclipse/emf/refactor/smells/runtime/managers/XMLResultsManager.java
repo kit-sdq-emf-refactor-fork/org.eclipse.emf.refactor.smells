@@ -93,7 +93,7 @@ public class XMLResultsManager extends XMLManager {
 	private static String getNameOfObject(EObject eObject) {
 		String ret = "";
 		for(EAttribute attribute : eObject.eClass().getEAllAttributes()){
-			if (attribute.getName().equals(NAME_ATT)) {
+			if (attribute.getName().equalsIgnoreCase(NAME_ATT)) {
 				ret = (String) eObject.eGet(attribute);
 				if (ret == null) ret = "";
 				break;
