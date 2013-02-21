@@ -354,7 +354,7 @@ public class SuggestionDialog extends Dialog {
 		String label = null;
 		String id = null;
 		for (EAttribute attribute : eObject.eClass().getEAllAttributes()) {
-			if (attribute.getName().equals("name")) {
+			if (attribute.getName().equalsIgnoreCase("name")) {
 				name = (String) eObject.eGet(attribute);
 			}
 		}
