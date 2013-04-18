@@ -16,3 +16,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jdt.core;bundle-version="3.8.2"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: org.eclipse.emf.refactor.smells.eraser,
+ org.eclipse.emf.refactor.smells.eraser.core,
+ org.eclipse.emf.refactor.smells.eraser.managers
