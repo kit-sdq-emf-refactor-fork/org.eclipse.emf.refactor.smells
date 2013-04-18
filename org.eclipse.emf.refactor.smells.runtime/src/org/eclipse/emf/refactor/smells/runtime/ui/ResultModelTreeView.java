@@ -101,7 +101,7 @@ public class ResultModelTreeView extends ViewPart {
 					 StructuredSelection ss = (StructuredSelection) event.getSelection();
 					 Object selection = ss.getFirstElement();
 					 if (selection instanceof EObject || selection instanceof EObjectGroup) {
-						 doAdditionalHighlightings();
+						 doAdditionalHighlightings(selection);
 					 }
 				 }
 				 if(editorPart != null && editorPart instanceof IViewerProvider){
@@ -208,9 +208,9 @@ public class ResultModelTreeView extends ViewPart {
 		contributeToActionBars();
 	}
 	
-	protected void doAdditionalHighlightings() {
+	protected void doAdditionalHighlightings(Object selection) {
 		for (IHighlighting highlighting : additionalHighlightings) {
-			highlighting.highlight();
+			highlighting.highlight(selection);
 		}
 	}
 

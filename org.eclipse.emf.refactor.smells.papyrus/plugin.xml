@@ -56,5 +56,21 @@
             commandId="org.eclipse.emf.refactor.smells.papyrus.findModelSmellCommand">
       </handler>
    </extension>
+   <extension
+         point="org.eclipse.gmf.runtime.diagram.ui.decoratorProviders">
+      <decoratorProvider
+            class="org.eclipse.emf.refactor.smells.papyrus.ui.PapyrusDecoratorProvider">
+         <Priority
+               name="Lowest">
+         </Priority>
+         <object
+               class="org.eclipse.gmf.runtime.notation.View(org.eclipse.gmf.runtime.notation)"
+               id="NODE">
+         </object>
+         <context
+               decoratorTargets="NODE">
+         </context>
+      </decoratorProvider>
+   </extension>
 
 </plugin>
