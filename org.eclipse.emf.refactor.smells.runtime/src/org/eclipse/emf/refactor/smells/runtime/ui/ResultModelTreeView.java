@@ -100,9 +100,9 @@ public class ResultModelTreeView extends ViewPart {
 					 editorPart = openEditor((IStructuredSelection)event.getSelection());
 					 StructuredSelection ss = (StructuredSelection) event.getSelection();
 					 Object selection = ss.getFirstElement();
-					 if (selection instanceof EObject || selection instanceof EObjectGroup) {
+//					 if (selection instanceof EObject || selection instanceof EObjectGroup) {
 						 doAdditionalHighlightings(selection);
-					 }
+//					 }
 				 }
 				 if(editorPart != null && editorPart instanceof IViewerProvider){
 					 setSelectionInModel((IViewerProvider)editorPart, (IStructuredSelection)event.getSelection());
