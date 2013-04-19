@@ -130,9 +130,9 @@ public class ResultModelTreeViewerLabelProvider implements ILabelProvider {
 			if(((ENamedElement) eObject).getName() != null && !((ENamedElement) eObject).getName().equals(""))
 				return ((ENamedElement)eObject).getName();
 			else
-				return eObject.toString();
+				return eObject.getClass().getSimpleName();
 		else
-			return eObject.toString();
+			return eObject.getClass().getSimpleName();
 		
 	}
 	
