@@ -95,9 +95,10 @@ public class ResultModelTreeView extends ViewPart {
 //					 Object[] objects = eObjectList.toArray();
 //					 RuntimeManager.selectModelObjects(objects);
 //				 }
-				 IEditorPart editorPart = null;
+				 IWorkbenchWindow workbenchWindow= PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+				 IEditorPart editorPart = workbenchWindow.getActivePage().getActiveEditor();
 				 if(event.getSelection() instanceof IStructuredSelection) {
-					 editorPart = openEditor((IStructuredSelection)event.getSelection());
+//					 editorPart = openEditor((IStructuredSelection)event.getSelection());
 					 StructuredSelection ss = (StructuredSelection) event.getSelection();
 					 Object selection = ss.getFirstElement();
 //					 if (selection instanceof EObject || selection instanceof EObjectGroup) {
@@ -164,38 +165,38 @@ public class ResultModelTreeView extends ViewPart {
 //				return eObject;
 			}
 
-			@SuppressWarnings("unchecked")
-			private IEditorPart openEditor(IStructuredSelection selection){
-				Object o = selection.getFirstElement();
-				EObject obj = null;
-				if(o instanceof EObject){
-					obj = (EObject)o;
-				}else if(o instanceof EObjectGroup){
-					EObjectGroup group = (EObjectGroup)o;
-					if(!group.getEObjects().isEmpty()){
-						obj = group.getEObjects().getFirst();
-					}
-				}
-				if(obj != null){
-//					URI uri = obj.eResource().getURI();
-//					String fileString = URI.decode(uri.path());
-//					fileString = fileString.replaceFirst("/resource", "");
-//					IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(fileString));
-//					IWorkbench workbench = PlatformUI.getWorkbench();
-					IFile file = ((LinkedList<ResultModel>)viewer.getInput()).get(0).getIFile();
-					IWorkbenchWindow workbenchWindow= PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-					IWorkbenchPage page = workbenchWindow.getActivePage();
-					try {
-						if(file.exists()){
-							return IDE.openEditor(page, file);
-						}
-					}catch (PartInitException exception) {
-						return null;
-					}
-				}
-		        return null;
-		     }
-				
+//			@SuppressWarnings("unchecked")
+//			private IEditorPart openEditor(IStructuredSelection selection){
+//				Object o = selection.getFirstElement();
+//				EObject obj = null;
+//				if(o instanceof EObject){
+//					obj = (EObject)o;
+//				}else if(o instanceof EObjectGroup){
+//					EObjectGroup group = (EObjectGroup)o;
+//					if(!group.getEObjects().isEmpty()){
+//						obj = group.getEObjects().getFirst();
+//					}
+//				}
+//				if(obj != null){
+////					URI uri = obj.eResource().getURI();
+////					String fileString = URI.decode(uri.path());
+////					fileString = fileString.replaceFirst("/resource", "");
+////					IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(fileString));
+////					IWorkbench workbench = PlatformUI.getWorkbench();
+//					IFile file = ((LinkedList<ResultModel>)viewer.getInput()).get(0).getIFile();
+//					IWorkbenchWindow workbenchWindow= PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+//					IWorkbenchPage page = workbenchWindow.getActivePage();
+//					try {
+//						if(file.exists()){
+//							return IDE.openEditor(page, file);
+//						}
+//					}catch (PartInitException exception) {
+//						return null;
+//					}
+//				}
+//		        return null;
+//		     }
+//				
 			
 		});
 		RuntimeManager.setResultModelTreeViewer(viewer);
