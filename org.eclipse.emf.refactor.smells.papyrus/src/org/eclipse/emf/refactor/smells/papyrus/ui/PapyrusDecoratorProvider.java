@@ -8,7 +8,7 @@ import org.eclipse.gmf.runtime.diagram.ui.services.decorator.IDecoratorTarget;
 
 public class PapyrusDecoratorProvider extends AbstractProvider implements IDecoratorProvider {
 	
-	public static final String PAPYRUS_DECORATOR_KEY = "papyrus_decorator";
+	public static final String PAPYRUS_DECORATOR_KEY = "papyrus_decorator_smells";
 
 	@Override
 	public boolean provides(IOperation operation) {
