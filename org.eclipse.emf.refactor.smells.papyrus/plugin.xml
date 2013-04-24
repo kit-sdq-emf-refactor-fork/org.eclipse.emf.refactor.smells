@@ -5,7 +5,7 @@
    <extension
          point="org.eclipse.ui.startup">
       <startup
-            class="org.eclipse.emf.refactor.smells.papyrus.ReporterStartup">
+            class="org.eclipse.emf.refactor.smells.papyrus.PapyrusStartup">
       </startup>
    </extension>
 

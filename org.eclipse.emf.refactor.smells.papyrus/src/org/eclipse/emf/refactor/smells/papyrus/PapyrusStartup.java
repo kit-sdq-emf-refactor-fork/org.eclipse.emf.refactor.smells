@@ -4,7 +4,7 @@ import org.eclipse.emf.refactor.smells.papyrus.ui.PapyrusHighlighting;
 import org.eclipse.emf.refactor.smells.runtime.managers.RuntimeManager;
 import org.eclipse.ui.IStartup;
 
-public class ReporterStartup implements IStartup {
+public class PapyrusStartup implements IStartup {
 
 	@Override
 	public void earlyStartup() {
