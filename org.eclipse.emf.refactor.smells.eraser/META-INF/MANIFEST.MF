@@ -18,4 +18,6 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.eclipse.emf.refactor.smells.eraser,
  org.eclipse.emf.refactor.smells.eraser.core,
- org.eclipse.emf.refactor.smells.eraser.managers
+ org.eclipse.emf.refactor.smells.eraser.handler,
+ org.eclipse.emf.refactor.smells.eraser.managers,
+ org.eclipse.emf.refactor.smells.eraser.ui
