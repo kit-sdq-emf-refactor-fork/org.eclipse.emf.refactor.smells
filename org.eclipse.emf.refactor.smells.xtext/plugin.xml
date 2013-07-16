@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="org.eclipse.emf.refactor.qa.menu"
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="true"
+            locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+         <menu
+               id="org.eclipse.emf.refactor.runtime.menu"
+               label="EMF Quality Assurance (use existing techniques)">
+            <command
+                  commandId="org.eclipse.emf.refactor.smells.xtext.findModelSmellCommand"
+                  label="Find Configured Model Smells"
+                  style="push">
+               <visibleWhen
+                  checkEnabled="true">
+               <iterate
+                     ifEmpty="false">
+                  <instanceof
+                        value="org.eclipse.jface.text.TextSelection">
+                  </instanceof>
+               </iterate>
+            </visibleWhen>
+            </command>
+         </menu>
+      </menuContribution>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            id="org.eclipse.emf.refactor.smells.xtext.findModelSmellCommand"
+            name="FindModelSmellCommand">
+      </command>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="org.eclipse.emf.refactor.smells.xtext.handler.FindModelSmellHandler"
+            commandId="org.eclipse.emf.refactor.smells.xtext.findModelSmellCommand">
+      </handler>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="false"
+            id="org.eclipse.emf.refactor.smells.xtext.eraser"
+            objectClass="org.eclipse.emf.refactor.smells.runtime.core.EObjectGroup">
+         <action
+               class="org.eclipse.emf.refactor.smells.xtext.handler.SuggestRefactoringAction"
+               icon="icons/refactoring.png"
+               id="org.eclipse.emf.refactor.smells.xtext.eraser.suggestRefactoringAction"
+               label="Suggest Xtext Refactorings">
+         </action>
+      </objectContribution>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="org.eclipse.emf.refactor.smells.xtext.XtextStartup">
+      </startup>
+   </extension>
+
+</plugin>
