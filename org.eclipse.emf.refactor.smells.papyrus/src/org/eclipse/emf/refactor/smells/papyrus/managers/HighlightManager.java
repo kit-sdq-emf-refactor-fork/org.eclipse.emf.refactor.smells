@@ -6,14 +6,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.refactor.metrics.runtime.core.Result;
 import org.eclipse.emf.refactor.smells.runtime.core.EObjectGroup;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.DecorationEditPolicy.DecoratorTarget;
 import org.eclipse.gmf.runtime.diagram.ui.services.decorator.IDecorator;
 import org.eclipse.gmf.runtime.diagram.ui.services.decorator.IDecoratorTarget;
 import org.eclipse.gmf.runtime.notation.Diagram;
 import org.eclipse.gmf.runtime.notation.View;
-
 
 public class HighlightManager {
 	
@@ -47,9 +45,6 @@ public class HighlightManager {
 			selected.add((EObject) selection);
 			System.out.println("Highlight ...");
 		}
-//		if (selection instanceof Result) {
-//			selected.addAll(((Result) selection).getContext());
-//		}
 		for (EObject eo : selected) {
 			System.out.println("EObject: " + eo.toString());
 		}
