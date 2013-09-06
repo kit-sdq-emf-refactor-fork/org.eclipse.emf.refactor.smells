@@ -5,10 +5,10 @@ package <%=info.getPackage()%>;
 
 import java.util.LinkedList;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.refactor.smells.interfaces.IModelSmellFinderClass;
+import org.eclipse.emf.refactor.smells.interfaces.IModelSmellFinder;
 
 
-public final class <%=info.getClassName()%> implements IModelSmellFinderClass {
+public final class <%=info.getClassName()%> implements IModelSmellFinder {
 
 	@Override
 	public LinkedList<LinkedList<EObject>> findSmell(EObject root) {

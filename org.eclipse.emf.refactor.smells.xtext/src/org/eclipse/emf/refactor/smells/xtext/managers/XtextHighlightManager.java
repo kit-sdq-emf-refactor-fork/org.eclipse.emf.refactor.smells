@@ -44,12 +44,14 @@ public class XtextHighlightManager {
 		for (EObject eObject : selected) {
 			XtextEditor xEditor = EditorUtils.getActiveXtextEditor();
 			ICompositeNode node = NodeModelUtils.findActualNodeFor(eObject);
-    		int offset = node.getOffset();
-			int length = node.getLength();
-    		ISourceViewer textViewer = xEditor.getInternalSourceViewer();
-			textViewer.setRangeIndication(offset, length, true);
-			textViewer.revealRange(offset, length);
-			textViewer.setSelectedRange(offset, length);
+			if (node != null && xEditor != null) {
+	    		int offset = node.getOffset();
+				int length = node.getLength();
+	    		ISourceViewer textViewer = xEditor.getInternalSourceViewer();
+				textViewer.setRangeIndication(offset, length, true);
+				textViewer.revealRange(offset, length);
+				textViewer.setSelectedRange(offset, length);
+			}
 		}
 	}
 
