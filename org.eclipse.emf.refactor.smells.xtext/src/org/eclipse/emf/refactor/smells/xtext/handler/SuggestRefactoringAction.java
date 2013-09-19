@@ -53,7 +53,7 @@ public class SuggestRefactoringAction implements IObjectActionDelegate {
 		if(group != null){
 			System.out.println("Group: " +  group);			
 			ModelSmell smell = group.getModelSmell();
-			SuggestionDialog dialog = new SuggestionDialog(shell, EraseManager.getCausedModelSmells(EraseManager.getFixingRefactorings(smell)), group);
+			SuggestionDialog dialog = new SuggestionDialog(shell, EraseManager.getInstance().getCausedModelSmells(EraseManager.getInstance().getFixingRefactorings(smell)), group);
 			int dialogResult = dialog.open();
 			if(dialogResult == Dialog.OK) {
 				selectedRefactoring = dialog.getSelectedRefactoring();
