@@ -78,7 +78,7 @@ public class SuggestionDialog extends Dialog {
 		super(parentShell);
 		this.relationMap = relationMap;
 		this.eObjects = eObjects;
-		this.dynamicallyCalculatedRefactorings = EraseManager.getApplicableRefactoringsDynamically(eObjects);
+		this.dynamicallyCalculatedRefactorings = EraseManager.getInstance().getApplicableRefactoringsDynamically(eObjects);
 		
 	}
 	
@@ -179,7 +179,7 @@ public class SuggestionDialog extends Dialog {
 			String smells = buildCausedSmellsTableEntry(refactoring);
 			ArrayList<EObject> contextObjects = new ArrayList<EObject>();
 			for(EObject eObject : eObjects.getEObjects()){
-				if(EraseManager.passesInitialCheck(eObject, refactoring)){
+				if(EraseManager.getInstance().passesInitialCheck(eObject, refactoring)){
 					contextObjects.add(eObject);
 				}
 			}		
@@ -209,7 +209,7 @@ public class SuggestionDialog extends Dialog {
 	private String buildCausedSmellsTableEntry(Refactoring refactoring) {
 		String smells = "";
 		
-		Set<ModelSmell> currentSet = EraseManager.getCausedModelSmells(refactoring);
+		Set<ModelSmell> currentSet = EraseManager.getInstance().getCausedModelSmells(refactoring);
 		if(currentSet != null){
 			for(ModelSmell smell : currentSet){
 				smells += smell.getName() + ", ";

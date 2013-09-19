@@ -124,7 +124,7 @@ public class RelationsPropertyPage extends PropertyPage {
 		label.setText(METAMODEL_LABEL);
 		metamodelCombo = new Combo(group, SWT.LEFT | SWT.READ_ONLY);
 		metamodelCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		for(String metamodelURI : EraseManager.getMetamodelURIs()){
+		for(String metamodelURI : EraseManager.getInstance().getMetamodelURIs()){
 			metamodelCombo.add(metamodelURI);
 		}
 		metamodelCombo.addListener(SWT.Selection, new Listener(){
@@ -221,7 +221,7 @@ public class RelationsPropertyPage extends PropertyPage {
 	 */
 	protected void fillCombos(String metamodelURI) {
 		smellCombo.removeAll();
-		Set<ModelSmellStub> smellStubs = EraseManager.getAllSmellStubsForMetamodel(metamodelURI);
+		Set<ModelSmellStub> smellStubs = EraseManager.getInstance().getAllSmellStubsForMetamodel(metamodelURI);
 		int i = 0;
 		for(ModelSmellStub smellStub : SetSorter.sortSmellStubSet(smellStubs)){ //SetSorter.sortSmellSet(EraseManager.getAllInstalledSmellsForMetamodel(metamodelURI))){
 			smellCombo.setData("" + i, smellStub);
@@ -238,7 +238,7 @@ public class RelationsPropertyPage extends PropertyPage {
 		});
 		
 		refactoringCombo.removeAll();
-		Set<ModelRefactoringStub> refactoringStubs = EraseManager.getAllRefactoringStubsForMetamodel(metamodelURI);
+		Set<ModelRefactoringStub> refactoringStubs = EraseManager.getInstance().getAllRefactoringStubsForMetamodel(metamodelURI);
 		i = 0;
 		for(ModelRefactoringStub refactoringStub : SetSorter.sortRefactoringStubSet(refactoringStubs)){
 			refactoringCombo.setData("" + i, refactoringStub);
@@ -333,7 +333,7 @@ public class RelationsPropertyPage extends PropertyPage {
 	 */
 	protected void fillSmellTable(ModelSmellStub smellStub) {
 		smellToRefactoringsTable.setData(smellStub);
-		for(ModelRefactoringStub refactoringStub : SetSorter.sortRefactoringStubSet(EraseManager.getAllRefactoringStubsForMetamodel(smellStub.getMetamodel()))){
+		for(ModelRefactoringStub refactoringStub : SetSorter.sortRefactoringStubSet(EraseManager.getInstance().getAllRefactoringStubsForMetamodel(smellStub.getMetamodel()))){
 			TableItem item = new TableItem(smellToRefactoringsTable, SWT.NONE);
 			boolean checked = entries.getFixingRefactorings(smellStub) != null && entries.getFixingRefactorings(smellStub).contains(refactoringStub);
 			item.setData(refactoringStub);
@@ -350,7 +350,7 @@ public class RelationsPropertyPage extends PropertyPage {
 	 */
 	protected void fillRefactoringTable(ModelRefactoringStub refactoringStub) {
 		refactoringToSmellsTable.setData(refactoringStub);
-		for(ModelSmellStub smellStub : SetSorter.sortSmellStubSet(EraseManager.getAllSmellStubsForMetamodel(refactoringStub.getMetamodel()))){
+		for(ModelSmellStub smellStub : SetSorter.sortSmellStubSet(EraseManager.getInstance().getAllSmellStubsForMetamodel(refactoringStub.getMetamodel()))){
 			TableItem item = new TableItem(refactoringToSmellsTable, SWT.NONE);
 			item.setData(smellStub);
 			boolean checked = entries.getCausedSmells(refactoringStub) != null && entries.getCausedSmells(refactoringStub).contains(smellStub);
@@ -400,7 +400,7 @@ public class RelationsPropertyPage extends PropertyPage {
 		}
 		saveTableContent();
 		NullProgressMonitor monitor = new NullProgressMonitor();
-		EraseManager.saveRelations(monitor, project, entries, saveDanglingEntries);
+		EraseManager.getInstance().saveRelations(monitor, project, entries, saveDanglingEntries);
 		return super.performOk();
 	}
 

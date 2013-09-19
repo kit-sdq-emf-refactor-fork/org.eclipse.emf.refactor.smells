@@ -69,8 +69,8 @@ public class PluginXMLManager {
 	public static ProjectEntries getRelationEntries(IProject project){
 		ProjectEntries entries = new ProjectEntries(project);		
 		
-		Set<ModelSmellStub> smellsInWorkspace = EraseManager.getAllSmellStubsFromWorkspace();
-		Set<ModelRefactoringStub> refactoringsInWorkspace = EraseManager.getAllRefactoringStubsFromWorkspace();
+		Set<ModelSmellStub> smellsInWorkspace = EraseManager.getInstance().getAllSmellStubsFromWorkspace();
+		Set<ModelRefactoringStub> refactoringsInWorkspace = EraseManager.getInstance().getAllRefactoringStubsFromWorkspace();
 		
 		final DocumentBuilder builder = createDocumentBuilder();
 		final String path = project.getLocation().toString() + PLUGIN_FILE;
@@ -100,7 +100,7 @@ public class PluginXMLManager {
 								Node smellIdEntry = smellToRefactoringsExtensionEntries.item(j);
 								String smellID = smellIdEntry.getAttributes().getNamedItem(ExtensionPointTags.SMELL_ID_TAG).getNodeValue();
 								
-								ModelSmell smell = EraseManager.getSmell(smellID);
+								ModelSmell smell = EraseManager.getInstance().getSmell(smellID);
 								ModelSmellStub smellStub = null;
 								if(smell != null){
 									smellStub = ModelSmellStub.convertModelSmell(smell);
@@ -119,7 +119,7 @@ public class PluginXMLManager {
 										Refactoring refactoring = null;
 										ModelRefactoringStub refactoringStub = null;
 										try{
-											refactoring = EraseManager.getRefactoring(refactoringID);
+											refactoring = EraseManager.getInstance().getRefactoring(refactoringID);
 											refactoringStub = ModelRefactoringStub.convertRefactoring(refactoring);
 										}catch(IllegalArgumentException ex){
 											for(ModelRefactoringStub stub : refactoringsInWorkspace){
@@ -149,7 +149,7 @@ public class PluginXMLManager {
 							Refactoring refactoring = null;
 							ModelRefactoringStub refactoringStub = null;
 							try{
-								refactoring = EraseManager.getRefactoring(refactoringID);
+								refactoring = EraseManager.getInstance().getRefactoring(refactoringID);
 								refactoringStub = ModelRefactoringStub.convertRefactoring(refactoring);
 							}catch(IllegalArgumentException ex){
 //								ex.printStackTrace();
@@ -163,7 +163,7 @@ public class PluginXMLManager {
 									.getElementsByTagName(ExtensionPointTags.REFACTORING_TO_SMELLS_SMELL_ELEMENT_TAG);
 								for(int k = 0; k < smellIDEntries.getLength(); k++){
 									String smellID = smellIDEntries.item(k).getAttributes().getNamedItem(ExtensionPointTags.SMELL_ID_TAG).getNodeValue();
-									ModelSmell smell = EraseManager.getSmell(smellID);
+									ModelSmell smell = EraseManager.getInstance().getSmell(smellID);
 									ModelSmellStub smellStub = null;
 									if(smell != null){
 										smellStub = ModelSmellStub.convertModelSmell(smell);

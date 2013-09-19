@@ -40,12 +40,24 @@ public class EraseManager {
 	
 	private static final SmellToRefactoringsRelation smellToRefactorings = SmellToRefactoringsRelation.INSTANCE;
 	private static final RefactoringToSmellsRelation refactoringToSmellsRelation = RefactoringToSmellsRelation.INSTANCE;
-	private static final List<Refactoring> allRefactorings = RefactoringManager.getAllRefactorings();
-	private static final List<ModelSmell> allSmells = ModelSmellManager.getAllModelSmells();
+	private static List<Refactoring> allRefactorings = RefactoringManager.getAllRefactorings();
+	private static List<ModelSmell> allSmells = ModelSmellManager.getAllModelSmells();
 	
-	public EraseManager() { }
+	private static EraseManager instance;
 	
-	public static ModelSmell getSmell(String id) {
+	private EraseManager() {
+		System.out.println("EraseManager initialized!");
+	}
+	
+	public static EraseManager getInstance() {
+		if (instance == null) {
+			instance = new EraseManager();
+		}
+		return instance;
+	}
+	
+	public ModelSmell getSmell(String id) {
+		allSmells = ModelSmellManager.getAllModelSmells();
 		for(ModelSmell currentSmell : allSmells) {
 			if(currentSmell.getId().equals(id))
 				return currentSmell;
@@ -53,7 +65,8 @@ public class EraseManager {
 		return null;
 	}
 	
-	public static Refactoring getRefactoring(String id) {
+	public Refactoring getRefactoring(String id) {
+		allRefactorings = RefactoringManager.getAllRefactorings();
 		for(Refactoring currentRefactoring : allRefactorings) {
 			if(currentRefactoring.getId().equals(id))
 				return currentRefactoring;
@@ -67,7 +80,7 @@ public class EraseManager {
 	 * @param group - The EObjectGroup for which the applicable refactorings are requested
 	 * @return Map containing the applicable refactorings (key) and their possible context objects (value)
 	 */
-	public static Map<Refactoring, Set<EObject>> getApplicableRefactoringsDynamically(EObjectGroup group){
+	public Map<Refactoring, Set<EObject>> getApplicableRefactoringsDynamically(EObjectGroup group){
 		Map<Refactoring, Set<EObject>> applicableRefactorings = new HashMap<Refactoring, Set<EObject>>();
 		for(Refactoring refactoring : allRefactorings){
 			for(EObject eObject : group.getEObjects()){
@@ -93,7 +106,7 @@ public class EraseManager {
 	 * @param refactoring - the EMFRefactoring of which the initial check is supposed to be performed
 	 * @return boolean indicating whether or not the initial check passed (true) or not (false)
 	 */
-	public static boolean passesInitialCheck(EObject contextObject, Refactoring refactoring) {
+	public boolean passesInitialCheck(EObject contextObject, Refactoring refactoring) {
 		ArrayList<EObject> selection = new ArrayList<EObject>();
 		selection.add(contextObject);
 		if (refactoring.getGui().showInMenu(selection)) {
@@ -123,7 +136,7 @@ public class EraseManager {
 	 * @param entries - the RelationEntries in which the relations are stored
 	 * @param saveDanglingEntries - flag indicating whether dangling relations should be saved (true) or discarded (false)
 	 */
-	public static void saveRelations(IProgressMonitor monitor, IProject project, ProjectEntries entries, boolean saveDanglingEntries){
+	public void saveRelations(IProgressMonitor monitor, IProject project, ProjectEntries entries, boolean saveDanglingEntries){
 		PluginXMLManager.saveProjectEntries(entries, project, saveDanglingEntries);
 		try {
 			project.refreshLocal(IProject.DEPTH_ZERO, monitor);
@@ -146,7 +159,7 @@ public class EraseManager {
 	 * @param smell - ModelSmell for which the fixing refactorings are found
 	 * @return - Set of Refactoring objects
 	 */
-	public static Set<Refactoring> getFixingRefactorings(ModelSmell smell){
+	public Set<Refactoring> getFixingRefactorings(ModelSmell smell){
 		return smellToRefactorings.getFixingRefactorings(smell);
 	}
 	
@@ -156,7 +169,7 @@ public class EraseManager {
 	 * @param refactoring -  the Refactoring for which the caused smells are to be found
 	 * @return Set of ModelSmell objects
 	 */
-	public static Set<ModelSmell> getCausedModelSmells(Refactoring refactoring){
+	public Set<ModelSmell> getCausedModelSmells(Refactoring refactoring){
 		return refactoringToSmellsRelation.getCausedSmells(refactoring);
 	}
 	
@@ -165,7 +178,7 @@ public class EraseManager {
 	 * @param refactorings - the Collection of refactorings for which the smells are to be found
 	 * @return Map containing the refactorings as keys and the lists of caused smells as values
 	 */
-	public static Map<Refactoring, Set<ModelSmell>> getCausedModelSmells(Collection<Refactoring> refactorings){
+	public Map<Refactoring, Set<ModelSmell>> getCausedModelSmells(Collection<Refactoring> refactorings){
 		HashMap<Refactoring, Set<ModelSmell>> relation = new HashMap<Refactoring, Set<ModelSmell>>();
 		for(Refactoring refactoring : refactorings){
 			relation.put(refactoring, getCausedModelSmells(refactoring));
@@ -178,7 +191,7 @@ public class EraseManager {
 	 * 
 	 * @return Set of Strings representing the metamodel URIs
 	 */
-	public static Set<String> getMetamodelURIs(){
+	public Set<String> getMetamodelURIs(){
 		HashSet<String> metamodelURIs = new HashSet<String>();
 		for(ModelSmell smell : allSmells){
 			metamodelURIs.add(smell.getMetamodel());
@@ -194,7 +207,7 @@ public class EraseManager {
 	 * 
 	 * @return List of Refactoring objects.
 	 */
-	public static List<Refactoring> getAllrefactorings() {
+	public List<Refactoring> getAllrefactorings() {
 		return allRefactorings;
 	}
 
@@ -203,7 +216,7 @@ public class EraseManager {
 	 * 
 	 * @return List of ModelSmell objects
 	 */
-	public static List<ModelSmell> getAllsmells() {
+	public List<ModelSmell> getAllsmells() {
 		return allSmells;
 	}
 	
@@ -213,7 +226,7 @@ public class EraseManager {
 	 * @param metamodelURI - String containing the metamodel URI
 	 * @return Set of ModelSmell objects.
 	 */
-	public static Set<ModelSmell> getAllInstalledSmellsForMetamodel(String metamodelURI){
+	public Set<ModelSmell> getAllInstalledSmellsForMetamodel(String metamodelURI){
 		return filterSmellsForMetamodel(allSmells, metamodelURI);
 	}
 	
@@ -223,7 +236,7 @@ public class EraseManager {
 	 * @param metamodelURI - String containing the metamodel URI
 	 * @return Set of Refactoring objects
 	 */
-	public static Set<Refactoring> getAllInstalledRefactoringsForMetamodel(String metamodelURI){
+	public Set<Refactoring> getAllInstalledRefactoringsForMetamodel(String metamodelURI){
 		return filterRefactoringsForMetamodel(allRefactorings, metamodelURI);
 	}
 	
@@ -232,7 +245,7 @@ public class EraseManager {
 	 * 
 	 * @return Set of ModelRefactoringStub objects
 	 */
-	public static Set<ModelRefactoringStub> getAllRefactoringStubsFromWorkspace(){
+	public Set<ModelRefactoringStub> getAllRefactoringStubsFromWorkspace(){
 		Set<ModelRefactoringStub> refactorings = new HashSet<ModelRefactoringStub>();
 		List<IProject> pluginProject = getAllPluginProjects();
 		for(IProject project : pluginProject){
@@ -248,14 +261,14 @@ public class EraseManager {
 	 * @param metamodelURI - String containing the metamodel URI
 	 * @return Set of ModelRefactoringStub objects
 	 */
-	public static Set<ModelRefactoringStub> getAllRefactoringStubsFromWorkspaceForMetamodel(String metamodelURI){
+	public Set<ModelRefactoringStub> getAllRefactoringStubsFromWorkspaceForMetamodel(String metamodelURI){
 		return filterRefactoringStubsForMetamodel(getAllRefactoringStubsFromWorkspace(), metamodelURI);
 	}
 	
 	/*
 	 * Filters a Set of ModelRefactoringStubs to contain only those corresponding to a certain metamodel.
 	 */
-	private static Set<ModelRefactoringStub> filterRefactoringStubsForMetamodel(Set<ModelRefactoringStub> refactoringStubs, String metamodelURI) {
+	private Set<ModelRefactoringStub> filterRefactoringStubsForMetamodel(Set<ModelRefactoringStub> refactoringStubs, String metamodelURI) {
 		HashSet<ModelRefactoringStub> result = new HashSet<ModelRefactoringStub>();
 		for(ModelRefactoringStub stub : refactoringStubs){
 			if(stub.getMetamodel().equals(metamodelURI)){
@@ -268,7 +281,7 @@ public class EraseManager {
 	/*
 	 * Filters a Collection of Refactoring objects to contain only those corresponding to a certain metamodel.
 	 */
-	private static Set<Refactoring> filterRefactoringsForMetamodel(Collection<Refactoring> refactorings, String metamodelURI){
+	private Set<Refactoring> filterRefactoringsForMetamodel(Collection<Refactoring> refactorings, String metamodelURI){
 		HashSet<Refactoring> result = new HashSet<Refactoring>();
 		for(Refactoring refactoring : refactorings){
 			if(refactoring.getNamespaceUri().equals(metamodelURI)){
@@ -283,7 +296,7 @@ public class EraseManager {
 	 * 
 	 * @return Set of ModelSmellStub objects
 	 */
-	public static Set<ModelSmellStub> getAllSmellStubsFromWorkspace(){
+	public Set<ModelSmellStub> getAllSmellStubsFromWorkspace(){
 		Set<ModelSmellStub> smells = new HashSet<ModelSmellStub>();
 		List<IProject> pluginProjects = getAllPluginProjects();
 		for(IProject project : pluginProjects){
@@ -299,14 +312,14 @@ public class EraseManager {
 	 * @param metamodelURI - String containing the metamodel URI
 	 * @return Set of ModelSmellStub objects
 	 */
-	public static Set<ModelSmellStub> getAllSmellStubsFromWorkspaceForMetamodel(String metamodelURI){
+	public Set<ModelSmellStub> getAllSmellStubsFromWorkspaceForMetamodel(String metamodelURI){
 		return filterSmellStubsForMetamodel(getAllSmellStubsFromWorkspace(), metamodelURI);
 	}
 	
 	/*
 	 * Filters a Set of ModelSmellStubs to contain only those corresponding to a certain metamodel.
 	 */
-	private static Set<ModelSmellStub> filterSmellStubsForMetamodel(Set<ModelSmellStub> smellStubs, String metamodelURI) {
+	private Set<ModelSmellStub> filterSmellStubsForMetamodel(Set<ModelSmellStub> smellStubs, String metamodelURI) {
 		HashSet<ModelSmellStub> result = new HashSet<ModelSmellStub>();
 		for(ModelSmellStub stub : smellStubs){
 			if(stub.getMetamodel().equals(metamodelURI)){
@@ -319,7 +332,7 @@ public class EraseManager {
 	/*
 	 * Filters a Set of ModelSmells to contain only those corresponding to a certain metamodel.
 	 */
-	private static Set<ModelSmell> filterSmellsForMetamodel(Collection<ModelSmell> smells, String metamodelURI){
+	private Set<ModelSmell> filterSmellsForMetamodel(Collection<ModelSmell> smells, String metamodelURI){
 		HashSet<ModelSmell> result = new HashSet<ModelSmell>();
 		for(ModelSmell smell : smells){
 			if(smell.getMetamodel().equals(metamodelURI)){
@@ -332,7 +345,7 @@ public class EraseManager {
 	/*
 	 * Returns all projects in the currently active workspace which  are plugin projects.
 	 */
-	private static List<IProject> getAllPluginProjects(){
+	private List<IProject> getAllPluginProjects(){
 		LinkedList<IProject> projects = new LinkedList<IProject>();
 		IProject[] allProjects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 		for (IProject project : allProjects) {
@@ -355,7 +368,7 @@ public class EraseManager {
 	 * 
 	 * @return - Set of ModelSmellStub objects
 	 */
-	public static Set<ModelSmellStub> getStubsForAllModelSmells(){
+	public Set<ModelSmellStub> getStubsForAllModelSmells(){
 		Set<ModelSmellStub> allStubs = new HashSet<ModelSmellStub>();
 		allStubs.addAll(getAllSmellStubsFromWorkspace());
 		for(ModelSmell smell : getAllsmells()){
@@ -369,7 +382,7 @@ public class EraseManager {
 	 * 
 	 * @return - Set of ModelRefactoringStubs
 	 */
-	public static Set<ModelRefactoringStub> getStubsForAllRefactorings(){
+	public Set<ModelRefactoringStub> getStubsForAllRefactorings(){
 		Set<ModelRefactoringStub> allStubs = new HashSet<ModelRefactoringStub>();
 		allStubs.addAll(getAllRefactoringStubsFromWorkspace());
 		for(Refactoring refactoring : getAllrefactorings()){
@@ -385,7 +398,7 @@ public class EraseManager {
 	 * @param metamodelURI - String containing the metamodel URI
 	 * @return - Set of ModelSmellStubs
 	 */
-	public static Set<ModelSmellStub> getAllSmellStubsForMetamodel(String metamodelURI){
+	public Set<ModelSmellStub> getAllSmellStubsForMetamodel(String metamodelURI){
 		return filterSmellStubsForMetamodel(getStubsForAllModelSmells(), metamodelURI);
 	}
 	
@@ -396,7 +409,7 @@ public class EraseManager {
 	 * @param metamodelURI - String containing the metamodel URI
 	 * @return - Set of ModelRefactoringStubs
 	 */
-	public static Set<ModelRefactoringStub> getAllRefactoringStubsForMetamodel(String metamodelURI){
+	public Set<ModelRefactoringStub> getAllRefactoringStubsForMetamodel(String metamodelURI){
 		return filterRefactoringStubsForMetamodel(getStubsForAllRefactorings(), metamodelURI);
 	}
 }

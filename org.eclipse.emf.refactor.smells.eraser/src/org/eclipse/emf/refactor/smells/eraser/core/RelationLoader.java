@@ -35,9 +35,9 @@ public class RelationLoader {
 						smellIDs.add(relationElementChild.getAttribute(ExtensionPointTags.SMELL_ID_TAG));
 					}
 				}
-				Refactoring refactoring = EraseManager.getRefactoring(refactoringID);
+				Refactoring refactoring = EraseManager.getInstance().getRefactoring(refactoringID);
 				for(String smellIDFromList : smellIDs){
-					ModelSmell smell = EraseManager.getSmell(smellIDFromList);
+					ModelSmell smell = EraseManager.getInstance().getSmell(smellIDFromList);
 					if(refactoring != null && smell != null){
 						if(relationMap.containsKey(refactoring)){
 							relationMap.get(refactoring).add(smell);
@@ -70,9 +70,9 @@ public class RelationLoader {
 						refactoringIDs.add(relationElementChild.getAttribute(ExtensionPointTags.REFACTORING_ID_TAG));
 					}
 				}
-				ModelSmell smell = EraseManager.getSmell(smellID);
+				ModelSmell smell = EraseManager.getInstance().getSmell(smellID);
 				for(String refactoringID : refactoringIDs){
-					Refactoring refactoring = EraseManager.getRefactoring(refactoringID);				
+					Refactoring refactoring = EraseManager.getInstance().getRefactoring(refactoringID);				
 					if(refactoring != null && smell != null){
 						if(relationMap.containsKey(smell)){
 							relationMap.get(smell).add(refactoring);
