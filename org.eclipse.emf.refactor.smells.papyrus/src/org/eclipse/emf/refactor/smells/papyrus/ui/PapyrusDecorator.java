@@ -100,7 +100,7 @@ public class PapyrusDecorator extends AbstractDecorator {
 
 	@Override
 	public void refresh() {
-		System.out.println("Start REFRESH");
+//		System.out.println("Start REFRESH");
 		removeDecoration();
 		IGraphicalEditPart editPart = (IGraphicalEditPart) getDecoratorTarget().getAdapter(EditPart.class);
 		
@@ -126,7 +126,7 @@ public class PapyrusDecorator extends AbstractDecorator {
 				} 
 			}
 		}
-		System.out.println("End REFRESH");
+//		System.out.println("End REFRESH");
 	}
 	
 	private boolean selectionContains(EObject element){

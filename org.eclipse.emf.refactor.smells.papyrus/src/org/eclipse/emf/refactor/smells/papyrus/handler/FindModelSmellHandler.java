@@ -8,6 +8,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.refactor.refactoring.papyrus.managers.PapyrusManager;
 import org.eclipse.emf.refactor.smells.papyrus.managers.HighlightManager;
 import org.eclipse.emf.refactor.smells.papyrus.managers.PapyrusSelectionManager;
 import org.eclipse.emf.refactor.smells.runtime.managers.RuntimeManager;
@@ -39,6 +40,7 @@ public class FindModelSmellHandler implements IHandler {
 		ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
 		HighlightManager.getInstance().setComponents(PapyrusSelectionManager.getObject(selection));
 		selectedEObject = PapyrusSelectionManager.getEObject(selection);
+		PapyrusManager.getInstance().setDiagram(PapyrusSelectionManager.getDiagram(selection));
 		if (selectedEObject == null) {	
 			MessageDialog.openError(
 					shell,

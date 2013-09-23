@@ -60,8 +60,8 @@ public class HighlightManager {
 	}
 
 	public void registerDecorator(IDecorator decorator, DecoratorTarget decoratorTarget) {
-		System.out.println("Register decorator; decorator: " + decorator.toString());
-		System.out.println("Register decorator; decoratorTarget: " + decoratorTarget.toString());
+//		System.out.println("Register decorator; decorator: " + decorator.toString());
+//		System.out.println("Register decorator; decoratorTarget: " + decoratorTarget.toString());
 		View view = (View) decoratorTarget.getAdapter(View.class);
 
 		if(decoratorTargets.containsKey(view.getElement())){
@@ -85,7 +85,7 @@ public class HighlightManager {
 	}
 
 	public void unregisterDecorator(IDecorator decorator) {
-		System.out.println("Unregister decorator; decorator: " + decorator.toString());
+//		System.out.println("Unregister decorator; decorator: " + decorator.toString());
 		decorators.remove(decorator);
 	}
 
