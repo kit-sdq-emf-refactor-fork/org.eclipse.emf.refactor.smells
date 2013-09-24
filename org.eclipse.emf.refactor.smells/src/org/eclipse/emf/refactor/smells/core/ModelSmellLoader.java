@@ -38,6 +38,7 @@ public class ModelSmellLoader {
 				e.printStackTrace();
 			}
 		}
+		java.util.Collections.sort(smells);
 		return smells;
 	}
 	
