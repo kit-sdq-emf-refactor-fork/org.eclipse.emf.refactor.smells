@@ -10,7 +10,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.refactor.smells.generator.core.ModelSmellInfo;
 import org.eclipse.emf.refactor.smells.generator.interfaces.INewModelSmellWizard;
-import org.eclipse.emf.refactor.smells.generator.managers.GenerationManager;
+import org.eclipse.emf.refactor.smells.generator.managers.SmellGenerationManager;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
@@ -77,8 +77,8 @@ public class NewModelSmellWizardJava extends Wizard implements INewWizard, INewM
 		try{
 			getContainer().run(true, true, new IRunnableWithProgress(){
 				public void run(IProgressMonitor monitor)throws InvocationTargetException, InterruptedException {
-					GenerationManager.getInstance();
-					GenerationManager.createNewModelSmell(monitor, getModelSmellInfo(), newSmellTargetProject);
+					SmellGenerationManager.getInstance();
+					SmellGenerationManager.createNewModelSmell(monitor, getModelSmellInfo(), newSmellTargetProject);
 				}
 			});
 		}

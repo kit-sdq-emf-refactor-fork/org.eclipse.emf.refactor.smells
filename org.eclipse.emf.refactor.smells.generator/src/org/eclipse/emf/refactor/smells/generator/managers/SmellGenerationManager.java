@@ -26,9 +26,9 @@ import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.JavaCore;
 import org.osgi.framework.Bundle;
 
-public class GenerationManager {
+public class SmellGenerationManager {
 	
-	private static GenerationManager instance;
+	private static SmellGenerationManager instance;
 	
 	private static final String JAVA_TEMPLATE_CLASS_NAME = "JavaFinderClassTemplate";
 	private static final String METRIC_TEMPLATE_CLASS_NAME = "MetricBasedFinderClassTemplate";
@@ -41,7 +41,7 @@ public class GenerationManager {
 	protected static String templateDirectory;
 	protected static List<IClasspathEntry> classpathEntries;
 	
-	protected GenerationManager() {
+	protected SmellGenerationManager() {
 		templateDirectory = setTemplateDirectory();
 		classpathEntries = setClassPathEntries();
 		System.out.println("GenerationManager initialized!");
@@ -62,9 +62,9 @@ public class GenerationManager {
 		return cpe;
 	}
 
-	public static GenerationManager getInstance() {
+	public static SmellGenerationManager getInstance() {
 		if (instance == null) {
-			instance = new GenerationManager();
+			instance = new SmellGenerationManager();
 		}
 		return instance;
 	}
