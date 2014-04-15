@@ -30,7 +30,7 @@ public class SetSorter {
 		if(array.length > 1){
 			for(int i = 0; i < array.length; i++){
 				for(int j = 0; j < array.length; j++){
-					if(array[i].getName().compareTo(array[j].getName()) > 0){
+					if(array[i].getName().compareTo(array[j].getName()) < 0){
 						swap(array, i, j);
 					}
 				}
@@ -58,7 +58,7 @@ public class SetSorter {
 		if(array.length > 1){
 			for(int i = 0; i < array.length; i++){
 				for(int j = 0; j < array.length; j++){
-					if(array[i].getName().compareTo(array[j].getName()) > 0){
+					if(array[i].getName().compareTo(array[j].getName()) < 0){
 						swap(array, i, j);
 					}
 				}
@@ -95,7 +95,7 @@ public class SetSorter {
 		if(array.length > 1){
 			for(int i = 0; i < array.length; i++){
 				for(int j = 0; j < array.length; j++){
-					if(array[i].getName().compareTo(array[j].getName()) > 0){
+					if(array[i].getName().compareTo(array[j].getName()) < 0){
 						swap(array, i, j);
 					}
 				}
@@ -123,7 +123,7 @@ public class SetSorter {
 		if(array.length > 1){
 			for(int i = 0; i < array.length; i++){
 				for(int j = 0; j < array.length; j++){
-					if(array[i].getName().compareTo(array[j].getName()) > 0){
+					if(array[i].getName().compareTo(array[j].getName()) < 0){
 						swap(array, i, j);
 					}
 				}

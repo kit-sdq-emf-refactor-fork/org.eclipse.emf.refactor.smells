@@ -47,7 +47,7 @@ public class RelationsPropertyPage extends PropertyPage {
 	private static final String SMELLS_TAB_LABEL = "Usable Refactorings to erase Smell";
 	private static final String REFACTORINGS_TAB_LABEL = "Smells possibly caused by Refactoring";
 	private static final String METAMODEL_LABEL = "Metamodel:";
-	private static final String HEADER_TEXT = "Please set the relations between model smells and model refactorings\n as defined in this project.";
+	private static final String HEADER_TEXT = "Please set the relations between model smells and model refactorings.";
 	private static final String NO_PLUGIN_NATURE_ERROR_MESSAGE = "The project you selected is not a plugin project!";
 	IProject project;
 	List<Table> tables;
@@ -225,7 +225,7 @@ public class RelationsPropertyPage extends PropertyPage {
 		int i = 0;
 		for(ModelSmellStub smellStub : SetSorter.sortSmellStubSet(smellStubs)){ //SetSorter.sortSmellSet(EraseManager.getAllInstalledSmellsForMetamodel(metamodelURI))){
 			smellCombo.setData("" + i, smellStub);
-			smellCombo.add(smellStub.getName() + "(" + smellStub.getId() + ")", i);
+			smellCombo.add(smellStub.getName(), i);// + "(" + smellStub.getId() + ")", i);
 			i++;
 		}
 		smellCombo.addListener(SWT.Selection, new Listener() {
@@ -242,7 +242,7 @@ public class RelationsPropertyPage extends PropertyPage {
 		i = 0;
 		for(ModelRefactoringStub refactoringStub : SetSorter.sortRefactoringStubSet(refactoringStubs)){
 			refactoringCombo.setData("" + i, refactoringStub);
-			refactoringCombo.add(refactoringStub.getName() + "(" + refactoringStub.getId() + ")", i);
+			refactoringCombo.add(refactoringStub.getName(), i);// + "(" + refactoringStub.getId() + ")", i);
 			i++;
 		}
 		refactoringCombo.addListener(SWT.Selection, new Listener() {
@@ -337,7 +337,7 @@ public class RelationsPropertyPage extends PropertyPage {
 			TableItem item = new TableItem(smellToRefactoringsTable, SWT.NONE);
 			boolean checked = entries.getFixingRefactorings(smellStub) != null && entries.getFixingRefactorings(smellStub).contains(refactoringStub);
 			item.setData(refactoringStub);
-			item.setText(1, refactoringStub.getName() + "(" + refactoringStub.getId() + ")");
+			item.setText(1, refactoringStub.getName());// + "(" + refactoringStub.getId() + ")");
 			item.setText(2, refactoringStub.getId());
 			item.setChecked(checked);
 		}
@@ -354,7 +354,7 @@ public class RelationsPropertyPage extends PropertyPage {
 			TableItem item = new TableItem(refactoringToSmellsTable, SWT.NONE);
 			item.setData(smellStub);
 			boolean checked = entries.getCausedSmells(refactoringStub) != null && entries.getCausedSmells(refactoringStub).contains(smellStub);
-			item.setText(1, smellStub.getName() + "(" + smellStub.getId() + ")");
+			item.setText(1, smellStub.getName());// + "(" + smellStub.getId() + ")");
 			item.setText(2, smellStub.getDescription());
 			item.setChecked(checked);
 		}

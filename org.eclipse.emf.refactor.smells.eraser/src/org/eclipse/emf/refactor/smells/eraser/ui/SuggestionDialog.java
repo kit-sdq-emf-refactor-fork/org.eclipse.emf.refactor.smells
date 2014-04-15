@@ -2,6 +2,7 @@ package org.eclipse.emf.refactor.smells.eraser.ui;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -46,6 +47,7 @@ public class SuggestionDialog extends Dialog {
 	
 	private static final String APPLICABLE_REFACTORINGS_TAB_LABEL = "Applicable Refactorings";
 	private static final String SUGGESTED_REFACTORINGS_TAB_LABEL = "Suggested Refactorings";
+	private static final String SUGGESTED_APPLICABLE_REFACTORINGS_TAB_LABEL = "Suggested and Applicable Refactorings";
 	private static final String CONTEXT_OBJECTS = "contextObjects";
 	private static final String SELECTED_CONTEXT_OBJECT = "selectedContextObject";
 	private static final String POSSIBLE_SMELLS_COLUMNL_LABEL = "Possible Smells";
@@ -67,19 +69,20 @@ public class SuggestionDialog extends Dialog {
 	private final Map<Refactoring, Set<ModelSmell>> relationMap;
 	private final EObjectGroup eObjects;
 	private final Map<Refactoring, Set<EObject>> dynamicallyCalculatedRefactorings;
+	private Map<Refactoring, Set<EObject>> suggestedApplicableRefactorings;
 	
 	private Refactoring selectedRefactoring = null;
 	private EObject selectedContextObject = null;
 	private TableItem selectedItem = null;
 	private Table staticTable;
 	private Table dynamicTable;
+	private Table suggestedApplicableTable;
 	
 	public SuggestionDialog(Shell parentShell, Map<Refactoring, Set<ModelSmell>> relationMap, EObjectGroup eObjects) {
 		super(parentShell);
 		this.relationMap = relationMap;
 		this.eObjects = eObjects;
 		this.dynamicallyCalculatedRefactorings = EraseManager.getInstance().getApplicableRefactoringsDynamically(eObjects);
-		
 	}
 	
 	protected void configureShell(Shell shell) {
@@ -90,14 +93,14 @@ public class SuggestionDialog extends Dialog {
 	@Override
 	protected Control createContents(Composite parent) {
 		
-		parent.setLayout(new GridLayout(1, true));
-		
+		parent.setLayout(new GridLayout(1, true));		
 		
 		TabFolder tabs = new TabFolder(parent, SWT.NULL);
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.horizontalAlignment = GridData.FILL;
 		tabs.setLayoutData(gridData);
 		
+		// static definitions		
 		TabItem staticDefinitionsTab = new TabItem(tabs, SWT.NULL);
 		staticDefinitionsTab.setText(SUGGESTED_REFACTORINGS_TAB_LABEL);
 		Composite staticComposite = new Composite(tabs, SWT.NULL);
@@ -119,6 +122,7 @@ public class SuggestionDialog extends Dialog {
 		staticTable.setHeaderVisible(true);
 		staticTable.setLinesVisible(true);
 		
+		// applicable refactorings
 		TabItem dynamicRelationsTab = new TabItem(tabs, SWT.NULL);
 		dynamicRelationsTab.setText(APPLICABLE_REFACTORINGS_TAB_LABEL);
 		Composite dynamicComposite = new Composite(tabs, SWT.NULL);
@@ -136,9 +140,42 @@ public class SuggestionDialog extends Dialog {
 		dynamicTable.setHeaderVisible(true);
 		dynamicTable.setLinesVisible(true);
 		
+		// applicable static relations
+		TabItem dynamicApplicablesTab = new TabItem(tabs, SWT.NULL);
+		dynamicApplicablesTab.setText(SUGGESTED_APPLICABLE_REFACTORINGS_TAB_LABEL);
+		Composite dynamicApplicableComposite = new Composite(tabs, SWT.NULL);
+		dynamicApplicableComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		dynamicApplicablesTab.setControl(dynamicApplicableComposite);
+		GridLayout dynamicApplicableLayout = new GridLayout();
+		dynamicApplicableComposite.setLayout(dynamicApplicableLayout);
+		
+		suggestedApplicableTable = new Table(dynamicApplicableComposite, SWT.SINGLE
+				| SWT.FULL_SELECTION | SWT.BORDER | SWT.V_SCROLL);
+		createRelationTableColumns(suggestedApplicableTable);
+		
+		fillSuggestedApplicableRefactorings();		
+		fillDynamicRelationsTable(suggestedApplicableRefactorings, suggestedApplicableTable);
+		
+		suggestedApplicableTable.setHeaderVisible(true);
+		suggestedApplicableTable.setLinesVisible(true);
+		
+		
 		return super.createContents(parent);
 	}
 	
+	private void fillSuggestedApplicableRefactorings() {
+		suggestedApplicableRefactorings = new HashMap<Refactoring, Set<EObject>>();
+		Refactoring[] staticRefactorings = {};
+		staticRefactorings = relationMap.keySet().toArray(staticRefactorings);
+		Arrays.sort(staticRefactorings);
+		Set<Refactoring> dynamicRefactorings = dynamicallyCalculatedRefactorings.keySet();
+		for (Refactoring refactoring : staticRefactorings) {
+			if (dynamicRefactorings.contains(refactoring)) {
+				suggestedApplicableRefactorings.put(refactoring, dynamicallyCalculatedRefactorings.get(refactoring));
+			}
+		}
+	}
+
 	/*
 	 * fills the table contained in the tab for applicable refactorings
 	 */
@@ -146,6 +183,7 @@ public class SuggestionDialog extends Dialog {
 			Map<Refactoring, Set<EObject>> dynamicMap,
 			Table dynamicTable) {
 		for(Refactoring refactoring : SetSorter.sortRefactoringSet(dynamicMap.keySet())){
+//		for(Refactoring refactoring : dynamicMap.keySet()) {
 				String causedSmells = buildCausedSmellsTableEntry(refactoring);
 				TableItem tableItem = new TableItem(dynamicTable, SWT.LEFT);
 				tableItem.setText(0, refactoring.getName());
