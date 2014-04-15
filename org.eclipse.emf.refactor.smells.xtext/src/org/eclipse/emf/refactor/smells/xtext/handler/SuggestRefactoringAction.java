@@ -58,9 +58,14 @@ public class SuggestRefactoringAction implements IObjectActionDelegate {
 			if(dialogResult == Dialog.OK) {
 				selectedRefactoring = dialog.getSelectedRefactoring();
 				contextObject = dialog.getSelectedContextObject();
-				IXtextDataManagement dm = 
-						(IXtextDataManagement) selectedRefactoring.getController().getDataManagementObject();
-				XtextDocument doc = dm.getXtextDocument();
+				XtextDocument doc = null;
+				if (selectedRefactoring.getController().getDataManagementObject()
+						instanceof IXtextDataManagement) {
+					IXtextDataManagement dm = (IXtextDataManagement) selectedRefactoring.getController().getDataManagementObject();
+					doc = dm.getXtextDocument();
+				} else {
+					doc = getXtextDocument();
+				}
 				XtextEditor editor = EditorUtils.getActiveXtextEditor();
 				System.out.println("Active XtextEditor: " + editor);
 				doc.modify(new IUnitOfWork.Void<XtextResource>() {
@@ -94,6 +99,12 @@ public class SuggestRefactoringAction implements IObjectActionDelegate {
 //		
 //		
 //	}
+
+	private XtextDocument getXtextDocument() {
+		XtextEditor editor = EditorUtils.getActiveXtextEditor();
+		System.out.println("XtextEditor: " + editor);
+		return (XtextDocument) editor.getDocument();
+	}
 
 	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
