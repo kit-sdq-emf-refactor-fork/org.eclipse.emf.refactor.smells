@@ -71,7 +71,8 @@ public class SmellGenerationManager {
 
 	public static void createNewModelSmell(IProgressMonitor monitor,
 			ModelSmellInfo modelSmellInfo, IProject newSmellTargetProject) {
-		DependenciesManager.updateDependencies(modelSmellInfo);
+		ManifestManager.updatePluginDependencies(modelSmellInfo);
+		ManifestManager.updatePluginToSingleton(modelSmellInfo);
 		createFinderClass(monitor, modelSmellInfo);		
 		XMLPluginFileManager.createModelSmellEntry(modelSmellInfo.getProjectPath(), 
 				modelSmellInfo.getName(), modelSmellInfo.getDescription(), 

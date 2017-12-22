@@ -11,7 +11,7 @@ import java.util.jar.Manifest;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.emf.refactor.smells.generator.core.ModelSmellInfo;
-import org.eclipse.emf.refactor.smells.generator.managers.DependenciesManager;
+import org.eclipse.emf.refactor.smells.generator.managers.ManifestManager;
 
 /**
  * Helper class for updating the dependencies of the target project of
@@ -22,7 +22,7 @@ import org.eclipse.emf.refactor.smells.generator.managers.DependenciesManager;
  *
  */
 
-public class HenshinDependenciesManager extends DependenciesManager {
+public class HenshinDependenciesManager extends ManifestManager {
 
 	private final static String REFACTOR_SMELLS_HENSHIN = "org.eclipse.emf.refactor.smells.henshin";
 	
