@@ -52,6 +52,7 @@ public class RuntimeManager {
 	public static void setEditorPart(IEditorPart editorPart) {
 		RuntimeManager.editorPart = editorPart;
 	}	
+
 	
 	private static LinkedList<ResultViewEntry> resultsViewInput;
 	
@@ -134,7 +135,7 @@ public class RuntimeManager {
 //			}
 	}
 	
-	private static void createSmellView() {
+	public static void createSmellView() {
 		IWorkbench wb = PlatformUI.getWorkbench();
 		IWorkbenchWindow win = wb.getActiveWorkbenchWindow();
 		IWorkbenchPage page = win.getActivePage();
@@ -202,6 +203,10 @@ public class RuntimeManager {
 	
 	public static void setResultModelTreeViewer(ResultModelTreeViewer viewer){
 		resultModelViewer = viewer;
+	}
+	
+	public static ResultModelTreeViewer getResultModelTreeViewer() {
+		return resultModelViewer;
 	}
 	
 	public static LinkedList<ResultModel> getResultModels(){

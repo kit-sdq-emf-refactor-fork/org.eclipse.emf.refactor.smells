@@ -53,6 +53,13 @@ public class ResultModel {
 		this.modelsmellResults = smellresults;
 	}
 	
+	public ResultModel(Date date, IFile file, LinkedList<ModelSmellResult> modelSmellResults) {
+		this.date = date;
+		this.iFile = file;
+		this.modelsmellResults = modelSmellResults;
+	}
+
+	
 	public LinkedList<ModelSmellResult> getModelSmellResults(){
 		return modelsmellResults;
 	}
