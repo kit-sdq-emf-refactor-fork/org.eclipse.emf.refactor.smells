@@ -1,22 +1,31 @@
 package org.eclipse.emf.refactor.smells.runtime.handler;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.commands.IHandler;
-import org.eclipse.core.commands.IHandlerListener;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
 import org.eclipse.emf.refactor.smells.runtime.core.EObjectGroup;
 import org.eclipse.emf.refactor.smells.runtime.core.ModelSmellResult;
 import org.eclipse.emf.refactor.smells.runtime.core.ResultModel;
 import org.eclipse.emf.refactor.smells.runtime.managers.RuntimeManager;
+import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -24,86 +33,96 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
+public class FindModelSmellHandler extends AbstractHandler {
 
-public class FindModelSmellHandler implements IHandler {
-
-	private IFile selectedFile;
-	private EObject selectedEObject;
-	private IProject selectedProject;
-	
-	private Shell shell;
-
-	@Override
-	public void addHandlerListener(IHandlerListener handlerListener) { }
-
-	@Override
-	public void dispose() { }
+	private static final Shell SHELL = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
 		
 		if (!(selection instanceof IStructuredSelection))
-			return null;
+			throw new ExecutionException("Selection is not instance of IStructuredSelection and could not be handled");
 		
-	
-		IStructuredSelection structuredSelection = (IStructuredSelection) selection;
-		List<?> selectedElementsList = structuredSelection.toList();
+
+		List<?> selectedElementsList = ((IStructuredSelection) selection).toList();
 		
-		Cursor oldCursor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell().getCursor();
+		Cursor oldCursor = SHELL.getCursor();
 		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell().setCursor(new Cursor(null,SWT.CURSOR_WAIT));
 		
-		int nSelectedEObjects = 0;
-		for (Object selectedElement : selectedElementsList) {
-			if (!(selectedElement instanceof EObject))
-				continue;
-			++nSelectedEObjects;
-			selectedEObject = (EObject) selectedElement;
-			
-			if (selectedEObject == null) {	
-				MessageDialog.openError(
-						shell,
-						"EMF Quality Assurance: Error when trying to execute smell search",
-						"No selected EMF model element!");
-				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell().setCursor(oldCursor);
-				return null;
-			}
-			
-			try {
-				if (selectedEObject != null) {
-					String path = selectedEObject.eResource().getURI().toPlatformString(true);
-					selectedFile = (IFile) ResourcesPlugin.getWorkspace().getRoot().findMember(path);
-				} 
-				selectedProject = selectedFile.getProject();
-				RuntimeManager.getInstance();
-				System.out.println("Root: " + selectedEObject);
-				System.out.println("Project: " + selectedProject);
-				RuntimeManager.findConfiguredModelSmells(selectedProject, selectedEObject, selectedFile);
-			} catch (Exception ex) {
-//				ex.printStackTrace();
-				Throwable cause = ex.getCause();
-				if(!(cause == null) && cause.getClass().getName().equals("org.eclipse.emf.ecore.xmi.PackageNotFoundException")){
-					MessageDialog.openError(
-							shell,
-							"EMF Quality Assurance: Error when trying to open File",
-							"The file you selected is not a (valid) EMF model.");
-				} else {
-				MessageDialog.openError(
-						shell,
-						"EMF Quality Assurance: Error when trying to execute smell search", 
-						ex.toString());
-				ex.printStackTrace();
-				}
-			}
+		List<EObject> selectedEObjects = selectedElementsList.stream().filter(o -> o instanceof EObject).map(o -> (EObject) o).collect(Collectors.toList());
+		
+		List<IContainer> selectedContainers = selectedElementsList.stream().filter(o -> o instanceof IContainer).map(o -> (IContainer) o).collect(Collectors.toList());
+		
+		List<IFile> selectedFiles = selectedElementsList.stream().filter(o -> o instanceof IFile).map(o -> (IFile) o).collect(Collectors.toList());
+		
+		handleEObjects(selectedEObjects, true);		
+		handleContainers(selectedContainers);
+		for (IFile selectedFile : selectedFiles) {
+			handleEObject(getEObjectFromEcoreFile(selectedFile));
 		}
 		
-		if (nSelectedEObjects > 1) {
+		SHELL.setCursor(oldCursor);
+		return null;
+		
+	}
+
+	private void handleContainers(List<? extends IContainer> containers) {
+		for (IContainer container : containers) {
+			handleContainer(container);
+		}
+	}
+
+	private void handleContainer(IContainer container) {
+		try {
+			List<IFile> ecoreFiles = getEcoreFiles(container);
+			List<EObject> eObjects = ecoreFiles.stream().map(elm -> getEObjectFromEcoreFile(elm)).collect(Collectors.toList());
+			handleEObjects(eObjects, true);
+			
+		} catch (CoreException e) {
+			MessageDialog.openError(SHELL, "Inaccessible resource", "An error occured while trying to access the selected resource");
+			e.printStackTrace();
+		} 
+
+	}
+
+	private EObject getEObjectFromEcoreFile(IFile ecoreFile) {
+		URI uri = URI.createPlatformResourceURI(ecoreFile.getFullPath().toString(), true); 
+		TransactionalEditingDomain transactionalEditingDomain = TransactionalEditingDomain.Factory.INSTANCE.createEditingDomain();
+		ResourceSet resourceSet = transactionalEditingDomain.getResourceSet();
+		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("ecore", new EcoreResourceFactoryImpl());
+		Resource resource = resourceSet.getResource(uri, true);
+		return resource.getContents().get(0);
+	}
+
+	private List<IFile> getEcoreFiles(IResource resource) throws CoreException {
+		List<IFile> result = new ArrayList<IFile>();
+		if (resource instanceof IFile) {
+			if (((IFile) resource).getFileExtension().equals("ecore")) {
+				result.add((IFile) resource);
+				return result;
+			}
+		}
+		else if (resource instanceof IContainer){
+			for (IResource r : ((IContainer) resource).members()) {
+				result.addAll(getEcoreFiles(r));
+			}
+		}
+		return result;
+	}
+
+	private void handleEObjects(List<EObject> selectedEObjects, boolean mergeResults) {
+		for (EObject selectedEObject : selectedEObjects) {
+			handleEObject(selectedEObject);				
+		}
+		
+		if (mergeResults && selectedEObjects.size() > 1) {
 			LinkedList<ResultModel> resultModels = RuntimeManager.getResultModels();
-			List<ResultModel> lastNResultModels = resultModels.subList(resultModels.size() - nSelectedEObjects, resultModels.size());
+			List<ResultModel> lastNResultModels = resultModels.subList(resultModels.size() - selectedEObjects.size(), resultModels.size());
 			
 			ResultModel mergedResultModel = mergeResultModels(lastNResultModels);
 			
-			for (int i = 1; i <= nSelectedEObjects; ++i) {
+			for (int i = 1; i <= selectedEObjects.size(); ++i) {
 				resultModels.removeLast();
 			}
 			
@@ -112,13 +131,16 @@ public class FindModelSmellHandler implements IHandler {
 			RuntimeManager.getResultModelTreeViewer().setInput(resultModels);
 			RuntimeManager.getResultModelTreeViewer().refresh();
 		}
-		
-		
-		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell().setCursor(oldCursor);
-		return true;
-		
 	}
 
+	private void handleEObject(EObject selectedEObject) {
+		String path = selectedEObject.eResource().getURI().toPlatformString(true);
+		IFile selectedFile = (IFile) ResourcesPlugin.getWorkspace().getRoot().findMember(path);
+		IProject selectedProject = selectedFile.getProject();
+		
+		RuntimeManager.findConfiguredModelSmells(selectedProject, selectedEObject, selectedFile);
+	}
+	
 	private ResultModel mergeResultModels(List<ResultModel> resultModels) {
 		Iterator<ResultModel> it = resultModels.iterator();
 		ResultModel firstResultModel = it.next();
@@ -145,17 +167,18 @@ public class FindModelSmellHandler implements IHandler {
 
 	@Override
 	public boolean isEnabled() {
-		return true;
-	}
+		ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
+		if (!(selection instanceof IStructuredSelection))
+			return false;
+		
 
-	@Override
-	public boolean isHandled() {
-		return true;
-	}
+		List<?> selectedElementsList = ((IStructuredSelection) selection).toList();
+		
 
-	@Override
-	public void removeHandlerListener(IHandlerListener handlerListener) { }
-	
+		return selectedElementsList.stream().allMatch(elm -> (elm instanceof EObject) ||
+				(elm instanceof IContainer) ||
+				((elm instanceof IFile) && ((IFile) elm).getFileExtension().equals("ecore")));
+	}
 
 	
 }
