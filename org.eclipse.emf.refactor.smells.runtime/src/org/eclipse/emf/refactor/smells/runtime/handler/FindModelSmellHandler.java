@@ -1,10 +1,11 @@
 package org.eclipse.emf.refactor.smells.runtime.handler;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.commands.AbstractHandler;
@@ -18,15 +19,14 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
-import org.eclipse.emf.refactor.smells.runtime.core.EObjectGroup;
-import org.eclipse.emf.refactor.smells.runtime.core.ModelSmellResult;
-import org.eclipse.emf.refactor.smells.runtime.core.ResultModel;
 import org.eclipse.emf.refactor.smells.runtime.managers.RuntimeManager;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
@@ -35,10 +35,15 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 public class FindModelSmellHandler extends AbstractHandler {
 
+	private static final String ECORE_EXTENSION = "ecore";
 	private static final Shell SHELL = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+	private ResourceSet resourceSet;
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
+		TransactionalEditingDomain transactionalEditingDomain = TransactionalEditingDomain.Factory.INSTANCE.createEditingDomain();
+		resourceSet = transactionalEditingDomain.getResourceSet();
+		
 		ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
 		
 		if (!(selection instanceof IStructuredSelection))
@@ -49,121 +54,75 @@ public class FindModelSmellHandler extends AbstractHandler {
 		
 		Cursor oldCursor = SHELL.getCursor();
 		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell().setCursor(new Cursor(null,SWT.CURSOR_WAIT));
+		Set<EPackage> toAnalyze = new HashSet<EPackage>();
 		
-		List<EObject> selectedEObjects = selectedElementsList.stream().filter(o -> o instanceof EObject).map(o -> (EObject) o).collect(Collectors.toList());
+		List<EPackage> selectedEPackages = selectedElementsList.stream().filter(o -> o instanceof EPackage).map(o -> (EPackage) o).collect(Collectors.toList());
+		toAnalyze.addAll(selectedEPackages);
 		
 		List<IContainer> selectedContainers = selectedElementsList.stream().filter(o -> o instanceof IContainer).map(o -> (IContainer) o).collect(Collectors.toList());
-		
-		List<IFile> selectedFiles = selectedElementsList.stream().filter(o -> o instanceof IFile).map(o -> (IFile) o).collect(Collectors.toList());
-		
-		handleEObjects(selectedEObjects, true);		
-		handleContainers(selectedContainers);
-		for (IFile selectedFile : selectedFiles) {
-			handleEObject(getEObjectFromEcoreFile(selectedFile));
+		for (IContainer container : selectedContainers) {
+			try {
+				toAnalyze.addAll(getRootEPackages(container));
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
 		}
 		
+		List<IFile> selectedFiles = selectedElementsList.stream().filter(o -> o instanceof IFile).map(o -> (IFile) o).collect(Collectors.toList());
+		selectedFiles.stream().forEach(file -> toAnalyze.add(getRootEPackageFromEcoreFile(file)));
+		
+		EPackage elm = toAnalyze.iterator().next();
+		String path = elm.eResource().getURI().toPlatformString(true);
+		IFile selectedFile = (IFile) ResourcesPlugin.getWorkspace().getRoot().findMember(path);
+		IProject selectedProject = selectedFile.getProject();
+		
+		
+		EPackage dummyPackage = EcoreFactory.eINSTANCE.createEPackage();
+		dummyPackage.getESubpackages().addAll(toAnalyze);
+		
+		RuntimeManager.findConfiguredModelSmells(selectedProject, dummyPackage, selectedFile);
 		SHELL.setCursor(oldCursor);
+		disposeResourceSet(resourceSet);
 		return null;
 		
 	}
+	
+    public void disposeResourceSet(ResourceSet resourceSet) {
+        // unload and delete all resources
+        Iterator<Resource> iterator = resourceSet.getResources().iterator();
+        while (iterator.hasNext()) {
+            Resource res = iterator.next();
+            res.unload();
+            iterator.remove();
+        }
+    }
 
-	private void handleContainers(List<? extends IContainer> containers) {
-		for (IContainer container : containers) {
-			handleContainer(container);
-		}
+	private Collection<EPackage> getRootEPackages(IContainer container) throws CoreException {
+		List<IFile> ecoreFiles = getEcoreFiles(container);
+		List<EPackage> ePackages = ecoreFiles.stream().map(elm -> getRootEPackageFromEcoreFile(elm)).collect(Collectors.toList());
+		return ePackages;
 	}
 
-	private void handleContainer(IContainer container) {
-		try {
-			List<IFile> ecoreFiles = getEcoreFiles(container);
-			List<EObject> eObjects = ecoreFiles.stream().map(elm -> getEObjectFromEcoreFile(elm)).collect(Collectors.toList());
-			handleEObjects(eObjects, true);
-			
-		} catch (CoreException e) {
-			MessageDialog.openError(SHELL, "Inaccessible resource", "An error occured while trying to access the selected resource");
-			e.printStackTrace();
-		} 
 
-	}
-
-	private EObject getEObjectFromEcoreFile(IFile ecoreFile) {
+	private EPackage getRootEPackageFromEcoreFile(IFile ecoreFile) {
 		URI uri = URI.createPlatformResourceURI(ecoreFile.getFullPath().toString(), true); 
-		TransactionalEditingDomain transactionalEditingDomain = TransactionalEditingDomain.Factory.INSTANCE.createEditingDomain();
-		ResourceSet resourceSet = transactionalEditingDomain.getResourceSet();
-		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("ecore", new EcoreResourceFactoryImpl());
+		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put(ECORE_EXTENSION, new EcoreResourceFactoryImpl());
 		Resource resource = resourceSet.getResource(uri, true);
-		return resource.getContents().get(0);
+		EcoreUtil.resolveAll(resource);
+		return (EPackage) resource.getContents().get(0);
 	}
 
-	private List<IFile> getEcoreFiles(IResource resource) throws CoreException {
+	private List<IFile> getEcoreFiles(IContainer container) throws CoreException {
 		List<IFile> result = new ArrayList<IFile>();
-		if (resource instanceof IFile) {
-			if (((IFile) resource).getFileExtension().equals("ecore")) {
-				result.add((IFile) resource);
-				return result;
-			}
-		}
-		else if (resource instanceof IContainer){
-			for (IResource r : ((IContainer) resource).members()) {
-				result.addAll(getEcoreFiles(r));
-			}
+		for (IResource r : container.members()) {
+			if (r instanceof IContainer)
+				result.addAll(getEcoreFiles((IContainer) r));
+			else if ((r instanceof IFile) && r.getFileExtension().equals(ECORE_EXTENSION))
+				result.add((IFile) r);
 		}
 		return result;
 	}
 
-	private void handleEObjects(List<EObject> selectedEObjects, boolean mergeResults) {
-		for (EObject selectedEObject : selectedEObjects) {
-			handleEObject(selectedEObject);				
-		}
-		
-		if (mergeResults && selectedEObjects.size() > 1) {
-			LinkedList<ResultModel> resultModels = RuntimeManager.getResultModels();
-			List<ResultModel> lastNResultModels = resultModels.subList(resultModels.size() - selectedEObjects.size(), resultModels.size());
-			
-			ResultModel mergedResultModel = mergeResultModels(lastNResultModels);
-			
-			for (int i = 1; i <= selectedEObjects.size(); ++i) {
-				resultModels.removeLast();
-			}
-			
-			resultModels.add(mergedResultModel);
-			
-			RuntimeManager.getResultModelTreeViewer().setInput(resultModels);
-			RuntimeManager.getResultModelTreeViewer().refresh();
-		}
-	}
-
-	private void handleEObject(EObject selectedEObject) {
-		String path = selectedEObject.eResource().getURI().toPlatformString(true);
-		IFile selectedFile = (IFile) ResourcesPlugin.getWorkspace().getRoot().findMember(path);
-		IProject selectedProject = selectedFile.getProject();
-		
-		RuntimeManager.findConfiguredModelSmells(selectedProject, selectedEObject, selectedFile);
-	}
-	
-	private ResultModel mergeResultModels(List<ResultModel> resultModels) {
-		Iterator<ResultModel> it = resultModels.iterator();
-		ResultModel firstResultModel = it.next();
-		LinkedList<ModelSmellResult> mergeModelSmellResults = new LinkedList<ModelSmellResult>(firstResultModel.getModelSmellResults());
-		while (it.hasNext()) {
-			ResultModel resultModel = it.next();
-			for (ModelSmellResult modelSmellResult : resultModel.getModelSmellResults()) {
-				Optional<ModelSmellResult> matchingModelSmellResult =  mergeModelSmellResults.stream().filter(r -> r.getModelSmell().getId().equals(modelSmellResult.getModelSmell().getId())).findAny();
-				if (matchingModelSmellResult.isPresent()) {
-					List<EObjectGroup> eObjectGroup = matchingModelSmellResult.get().getEObjectGroups();
-					for (EObjectGroup g : modelSmellResult.getEObjectGroups()) {
-						if (eObjectGroup.stream().filter(x -> x.getEObjects().equals(g.getEObjects())).count() == 0)
-							eObjectGroup.add(g);
-					}
-					//matchingModelSmellResult.get().addEObjectGroups(modelSmellResult.getEObjectGroups());
-				} else {
-					mergeModelSmellResults.add(modelSmellResult);
-				}
-			}
-		}
-		
-		return new ResultModel(firstResultModel.getDate(), firstResultModel.getIFile(), mergeModelSmellResults);
-	}
 
 	@Override
 	public boolean isEnabled() {
@@ -177,7 +136,7 @@ public class FindModelSmellHandler extends AbstractHandler {
 
 		return selectedElementsList.stream().allMatch(elm -> (elm instanceof EObject) ||
 				(elm instanceof IContainer) ||
-				((elm instanceof IFile) && ((IFile) elm).getFileExtension().equals("ecore")));
+				((elm instanceof IFile) && ((IFile) elm).getFileExtension().equals(ECORE_EXTENSION)));
 	}
 
 	

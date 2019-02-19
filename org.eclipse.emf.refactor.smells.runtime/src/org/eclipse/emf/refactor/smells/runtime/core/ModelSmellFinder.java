@@ -6,6 +6,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.refactor.smells.core.ModelSmell;
 
+import edu.kit.ipd.sdq.ecoregraph.EcoreGraph;
 import edu.kit.ipd.sdq.ecoregraph.EcoreGraphRegistry;
 
 
@@ -21,7 +22,7 @@ public class ModelSmellFinder {
 	private static final ModelSmellFinder instance = new ModelSmellFinder();
 	//private LinkedList<Result> results = new LinkedList<Result>();
 	private static EObject rootElement;
-	
+	public static EcoreGraph ecoreGraph;
 	private ModelSmellFinder(){
 		
 	}
@@ -40,8 +41,8 @@ public class ModelSmellFinder {
 	public static LinkedList<Result> findModelSmells(LinkedList<ModelSmell> smells, EObject root){
 		rootElement = root;
 		
-		EcoreGraphRegistry.INSTANCE.registerEPackage((EPackage) rootElement);
-				
+		//EcoreGraphRegistry.INSTANCE.registerEPackage((EPackage) rootElement);
+		ecoreGraph = new EcoreGraph((EPackage) root);	
 		String nsUri = ((EPackage)root.eClass().eContainer()).getNsURI();
 		LinkedList<Result> results = new LinkedList<Result>();
 		for(ModelSmell smell : smells){
