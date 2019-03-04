@@ -33,6 +33,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
 public class FindModelSmellHandler extends AbstractHandler {
@@ -47,8 +48,9 @@ public class FindModelSmellHandler extends AbstractHandler {
     @Override
     public Object execute(ExecutionEvent event) {
 
-        ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
-        Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+        IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+        ISelection selection = activeWorkbenchWindow.getSelectionService().getSelection();
+        Shell shell = activeWorkbenchWindow.getShell();
 
         // start async execution
         new Thread() {
