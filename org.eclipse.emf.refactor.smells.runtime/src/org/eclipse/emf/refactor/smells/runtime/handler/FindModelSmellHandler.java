@@ -107,7 +107,7 @@ public class FindModelSmellHandler extends AbstractHandler {
         // Misha: do not change cursor. This code can be deleted soon 
 //        Cursor oldCursor = SHELL.getCursor();
 //        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell().setCursor(new Cursor(null, SWT.CURSOR_WAIT));
-        Set<EPackage> toAnalyze = new HashSet<EPackage>();
+        List<EPackage> toAnalyze = new ArrayList<EPackage>();
 
         List<EPackage> selectedEPackages = selectedElementsList.stream().filter(o -> o instanceof EPackage).map(o -> (EPackage) o).collect(Collectors.toList());
         toAnalyze.addAll(selectedEPackages);
@@ -130,11 +130,23 @@ public class FindModelSmellHandler extends AbstractHandler {
         IProject selectedProject = selectedFile.getProject();
 
         EPackage dummyPackage = EcoreFactory.eINSTANCE.createEPackage();
+        
+        //save parent packages
+		List<EPackage> parentPackages = toAnalyze.stream().map(p -> p.getESuperPackage()).collect(Collectors.toList());
+        
         dummyPackage.getESubpackages().addAll(toAnalyze);
 
         RuntimeManager.findConfiguredModelSmells(selectedProject, dummyPackage, selectedFile, activePage);
         // Misha: do not change cursor. This code can be deleted soon        
 //        SHELL.setCursor(oldCursor);
+
+		//recover parent packages
+		for (int i = 0; i < parentPackages.size(); ++i) {
+			if (parentPackages.get(i) != null) {
+				parentPackages.get(i).getESubpackages().add(toAnalyze.get(i));
+			}
+		}
+
         disposeResourceSet(resourceSet);
     }
 
