@@ -67,7 +67,7 @@ public class FindModelSmellHandler extends AbstractHandler {
 
                 try {
                     doTheWork();
-                } catch (ExecutionException e) {
+                } catch (Exception e) {
                     prompt("An unexpected exception occured: " + e.getMessage());
                     e.printStackTrace();
                 }
