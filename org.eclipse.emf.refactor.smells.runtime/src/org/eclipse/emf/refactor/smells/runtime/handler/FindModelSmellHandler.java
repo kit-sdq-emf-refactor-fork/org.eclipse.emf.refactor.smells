@@ -47,6 +47,9 @@ public class FindModelSmellHandler extends AbstractHandler {
     @Override
     public Object execute(ExecutionEvent event) {
 
+        ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
+        Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+
         // start async execution
         new Thread() {
             @Override
@@ -58,7 +61,7 @@ public class FindModelSmellHandler extends AbstractHandler {
                         try {
                             monitor.wait();
                         } catch (InterruptedException e) {
-                            prompt("A waiting job was interrupted.");
+                            prompt("A waiting job was interrupted.", shell);
                             e.printStackTrace();
                         }
                     }
@@ -66,9 +69,9 @@ public class FindModelSmellHandler extends AbstractHandler {
                 }
 
                 try {
-                    doTheWork();
+                    doTheWork(selection);
                 } catch (Exception e) {
-                    prompt("An unexpected exception occured: " + e.getMessage());
+                    prompt("An unexpected exception occured: " + e.getMessage(), shell);
                     e.printStackTrace();
                 }
 
@@ -83,17 +86,14 @@ public class FindModelSmellHandler extends AbstractHandler {
         return null;
     }
 
-    private void prompt(String message) {
-        Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+    private void prompt(String message, Shell shell) {
         MessageDialog.openInformation(shell, "EMF Refactor", message);
         System.out.println("EMF Refactor prompt" + message);
     }
 
-    private void doTheWork() throws ExecutionException {
+    private void doTheWork(ISelection selection) throws ExecutionException {
         TransactionalEditingDomain transactionalEditingDomain = TransactionalEditingDomain.Factory.INSTANCE.createEditingDomain();
         resourceSet = transactionalEditingDomain.getResourceSet();
-
-        ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection();
 
         if (!(selection instanceof IStructuredSelection))
             throw new ExecutionException("Selection is not instance of IStructuredSelection and could not be handled");
