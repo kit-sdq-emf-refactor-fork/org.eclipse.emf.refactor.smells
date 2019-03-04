@@ -56,7 +56,7 @@ public class FindModelSmellHandler extends AbstractHandler {
                 synchronized (monitor) {
                     while (running) {
                         try {
-                            this.wait();
+                            monitor.wait();
                         } catch (InterruptedException e) {
                             prompt("A waiting job was interrupted.");
                             e.printStackTrace();
