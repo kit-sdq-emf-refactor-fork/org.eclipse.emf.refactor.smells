@@ -30,8 +30,6 @@ import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -40,7 +38,6 @@ import org.eclipse.ui.PlatformUI;
 public class FindModelSmellHandler extends AbstractHandler {
 
     private static final String ECORE_EXTENSION = "ecore";
-    private static final Shell SHELL = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
     private ResourceSet resourceSet;
 
     private static Object monitor = new Object();
@@ -83,6 +80,8 @@ public class FindModelSmellHandler extends AbstractHandler {
                     running = false;
                     monitor.notifyAll();
                 }
+
+                prompt("Smell analysis done.", shell);
             }
         }.start();
 
@@ -103,8 +102,9 @@ public class FindModelSmellHandler extends AbstractHandler {
 
         List<?> selectedElementsList = ((IStructuredSelection) selection).toList();
 
-        Cursor oldCursor = SHELL.getCursor();
-        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell().setCursor(new Cursor(null, SWT.CURSOR_WAIT));
+        // Misha: do not change cursor. This code can be deleted soon 
+//        Cursor oldCursor = SHELL.getCursor();
+//        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell().setCursor(new Cursor(null, SWT.CURSOR_WAIT));
         Set<EPackage> toAnalyze = new HashSet<EPackage>();
 
         List<EPackage> selectedEPackages = selectedElementsList.stream().filter(o -> o instanceof EPackage).map(o -> (EPackage) o).collect(Collectors.toList());
@@ -131,7 +131,8 @@ public class FindModelSmellHandler extends AbstractHandler {
         dummyPackage.getESubpackages().addAll(toAnalyze);
 
         RuntimeManager.findConfiguredModelSmells(selectedProject, dummyPackage, selectedFile);
-        SHELL.setCursor(oldCursor);
+        // Misha: do not change cursor. This code can be deleted soon        
+//        SHELL.setCursor(oldCursor);
         disposeResourceSet(resourceSet);
     }
 
