@@ -32,6 +32,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Cursor;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
@@ -89,7 +90,7 @@ public class FindModelSmellHandler extends AbstractHandler {
     }
 
     private void prompt(String message, Shell shell) {
-        MessageDialog.openInformation(shell, "EMF Refactor", message);
+        Display.getDefault().asyncExec(() -> MessageDialog.openInformation(shell, "EMF Refactor", message));
         System.out.println("EMF Refactor prompt" + message);
     }
 
