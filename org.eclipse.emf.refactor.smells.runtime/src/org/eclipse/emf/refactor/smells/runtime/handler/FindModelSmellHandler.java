@@ -32,6 +32,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
@@ -49,6 +50,7 @@ public class FindModelSmellHandler extends AbstractHandler {
         IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
         ISelection selection = activeWorkbenchWindow.getSelectionService().getSelection();
         Shell shell = activeWorkbenchWindow.getShell();
+        IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
 
         // start async execution
         new Thread() {
@@ -69,7 +71,7 @@ public class FindModelSmellHandler extends AbstractHandler {
                 }
 
                 try {
-                    doTheWork(selection);
+                    doTheWork(selection, activePage);
                 } catch (Exception e) {
                     prompt("An unexpected exception occured: " + e.getMessage(), shell);
                     e.printStackTrace();
@@ -93,7 +95,7 @@ public class FindModelSmellHandler extends AbstractHandler {
         System.out.println("EMF Refactor prompt" + message);
     }
 
-    private void doTheWork(ISelection selection) throws ExecutionException {
+    private void doTheWork(ISelection selection, IWorkbenchPage activePage) throws ExecutionException {
         TransactionalEditingDomain transactionalEditingDomain = TransactionalEditingDomain.Factory.INSTANCE.createEditingDomain();
         resourceSet = transactionalEditingDomain.getResourceSet();
 
@@ -130,7 +132,7 @@ public class FindModelSmellHandler extends AbstractHandler {
         EPackage dummyPackage = EcoreFactory.eINSTANCE.createEPackage();
         dummyPackage.getESubpackages().addAll(toAnalyze);
 
-        RuntimeManager.findConfiguredModelSmells(selectedProject, dummyPackage, selectedFile);
+        RuntimeManager.findConfiguredModelSmells(selectedProject, dummyPackage, selectedFile, activePage);
         // Misha: do not change cursor. This code can be deleted soon        
 //        SHELL.setCursor(oldCursor);
         disposeResourceSet(resourceSet);
