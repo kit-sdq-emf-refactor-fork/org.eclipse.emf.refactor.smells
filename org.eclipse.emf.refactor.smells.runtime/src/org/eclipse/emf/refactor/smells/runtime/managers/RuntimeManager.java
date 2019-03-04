@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -20,6 +22,7 @@ import org.eclipse.emf.refactor.smells.runtime.core.ResultViewEntry;
 import org.eclipse.emf.refactor.smells.runtime.ui.ResultModelTreeView;
 import org.eclipse.emf.refactor.smells.runtime.ui.ResultModelTreeViewer;
 import org.eclipse.jface.action.Action;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
@@ -111,6 +114,7 @@ public class RuntimeManager {
             IWorkbenchWindow win = wb.getActiveWorkbenchWindow();
             page = win.getActivePage();
         }
+        final IWorkbenchPage finalPage = page;
 
         ConfigurationManager.getInstance();
         LinkedList<ModelSmell> smells = ConfigurationManager.getSelectedModelSmells(project);
@@ -125,22 +129,38 @@ public class RuntimeManager {
 //		IFile iFile = selectedFile;
         //=====
         resultModels.add(new ResultModel(results, selectedFile, new Date()));
-        // TA
-        if (!isSmellViewOpen(page)) {
-            createSmellView(page);
-        }
-        // End TA
-        if (resultModelViewer != null && resultModelViewer.getContentProvider() != null)
-            if (resultModels != null) {
-                resultModelViewer.setInput(resultModels);
+
+        CyclicBarrier barrier = new CyclicBarrier(2);
+        Display.getDefault().asyncExec(() -> {
+            // TA
+            if (!isSmellViewOpen(finalPage)) {
+                createSmellView(finalPage);
             }
-        for (Result result : results) {
-            resultsViewInput.addAll(result.getResultViewEntries());
+            // End TA
+            if (resultModelViewer != null && resultModelViewer.getContentProvider() != null)
+                if (resultModels != null) {
+                    resultModelViewer.setInput(resultModels);
+                }
+            for (Result result : results) {
+                resultsViewInput.addAll(result.getResultViewEntries());
+            }
+            try {
+                barrier.await();
+            } catch (InterruptedException | BrokenBarrierException e) {
+                System.out.println("Unexpected exception in display thread");
+                e.printStackTrace();
+            }
+//		    if(resultsViewer!=null)
+//			   if(resultsViewInput!=null){
+//				  resultsViewer.setInput(resultsViewInput);
+//			   }
+        });
+        try {
+            barrier.await();
+        } catch (InterruptedException | BrokenBarrierException e) {
+            System.out.println("Unexpected exception");
+            e.printStackTrace();
         }
-//		if(resultsViewer!=null)
-//			if(resultsViewInput!=null){
-//				resultsViewer.setInput(resultsViewInput);
-//			}
     }
 
     public static void findConfiguredModelSmells(IProject project, EObject root, IFile selectedFile) {
