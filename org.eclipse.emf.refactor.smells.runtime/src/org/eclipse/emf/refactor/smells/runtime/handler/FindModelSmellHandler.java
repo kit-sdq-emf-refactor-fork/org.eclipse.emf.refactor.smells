@@ -2,10 +2,8 @@ package org.eclipse.emf.refactor.smells.runtime.handler;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.commands.AbstractHandler;
@@ -92,7 +90,7 @@ public class FindModelSmellHandler extends AbstractHandler {
 
     private void prompt(String message, Shell shell) {
         Display.getDefault().asyncExec(() -> MessageDialog.openInformation(shell, "EMF Refactor", message));
-        System.out.println("EMF Refactor prompt" + message);
+        System.out.println("EMF Refactor prompt: " + message);
     }
 
     private void doTheWork(ISelection selection, IWorkbenchPage activePage) throws ExecutionException {
@@ -130,22 +128,22 @@ public class FindModelSmellHandler extends AbstractHandler {
         IProject selectedProject = selectedFile.getProject();
 
         EPackage dummyPackage = EcoreFactory.eINSTANCE.createEPackage();
-        
+
         //save parent packages
-		List<EPackage> parentPackages = toAnalyze.stream().map(p -> p.getESuperPackage()).collect(Collectors.toList());
-        
+        List<EPackage> parentPackages = toAnalyze.stream().map(p -> p.getESuperPackage()).collect(Collectors.toList());
+
         dummyPackage.getESubpackages().addAll(toAnalyze);
 
         RuntimeManager.findConfiguredModelSmells(selectedProject, dummyPackage, selectedFile, activePage);
         // Misha: do not change cursor. This code can be deleted soon        
 //        SHELL.setCursor(oldCursor);
 
-		//recover parent packages
-		for (int i = 0; i < parentPackages.size(); ++i) {
-			if (parentPackages.get(i) != null) {
-				parentPackages.get(i).getESubpackages().add(toAnalyze.get(i));
-			}
-		}
+        //recover parent packages
+        for (int i = 0; i < parentPackages.size(); ++i) {
+            if (parentPackages.get(i) != null) {
+                parentPackages.get(i).getESubpackages().add(toAnalyze.get(i));
+            }
+        }
 
         disposeResourceSet(resourceSet);
     }
